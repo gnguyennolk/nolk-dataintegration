@@ -1,0 +1,3599 @@
+{
+    "name": "PIM - Record Level - Sync Skubana Vendor SKU",
+    "flow": [
+        {
+            "id": 18,
+            "module": "gateway:CustomWebHook",
+            "version": 1,
+            "parameters": {
+                "hook": 330933,
+                "maxResults": 1
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 150
+                },
+                "restore": {
+                    "hook": {
+                        "label": "PIM - Record Level - Sync Skubana Vendor SKU"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "hook",
+                        "type": "hook",
+                        "label": "Webhook",
+                        "required": true
+                    },
+                    {
+                        "name": "maxResults",
+                        "type": "number",
+                        "label": "Maximum number of results"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "recordID",
+                        "type": "text"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 19,
+            "module": "util:FunctionSleep",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "duration": "10"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 150
+                },
+                "expect": [
+                    {
+                        "name": "duration",
+                        "type": "uinteger",
+                        "label": "Delay",
+                        "required": true,
+                        "validate": {
+                            "max": 300,
+                            "min": 1
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "id": 3,
+            "module": "util:SetVariables",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "scope": "roundtrip",
+                "variables": [
+                    {
+                        "name": "skubana_api_slug",
+                        "value": "https://api.skubana.com"
+                    },
+                    {
+                        "name": "skubana_access_token",
+                        "value": "ab0e575e-113f-46f5-9c15-c86f019e56c2"
+                    },
+                    {
+                        "name": "v_receipt_1",
+                        "value": "gnguyen@nolk.com"
+                    },
+                    {
+                        "name": "GET: Skubana Products",
+                        "value": "/v1.1/products"
+                    },
+                    {
+                        "name": "GET: Single Skubana Product",
+                        "value": "/v1.1/product"
+                    },
+                    {
+                        "name": "PUT: Skubana Core",
+                        "value": "/v1.1/products/cores"
+                    },
+                    {
+                        "name": "PUT: Skubana Bundles",
+                        "value": "/v1.1/products/bundles"
+                    },
+                    {
+                        "name": "GET: Skubana Vendor SKU",
+                        "value": "/v1/vendorproducts"
+                    },
+                    {
+                        "name": "PUT: Create Vendor SKU",
+                        "value": "/v1/vendors/vendorproduct"
+                    }
+                ]
+            },
+            "metadata": {
+                "designer": {
+                    "x": 600,
+                    "y": 150
+                },
+                "restore": {
+                    "scope": {
+                        "label": "One cycle"
+                    },
+                    "variables": {
+                        "items": [
+                            "undefined",
+                            "undefined",
+                            "undefined",
+                            "undefined",
+                            "undefined",
+                            "undefined",
+                            "undefined",
+                            "undefined",
+                            "undefined"
+                        ]
+                    }
+                },
+                "expect": [
+                    {
+                        "name": "variables",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Variable name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "any",
+                                "label": "Variable value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Variables"
+                    },
+                    {
+                        "name": "scope",
+                        "type": "select",
+                        "label": "Variable lifetime",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "roundtrip",
+                                "execution"
+                            ]
+                        }
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "skubana_api_slug",
+                        "type": "any",
+                        "label": "skubana_api_slug"
+                    },
+                    {
+                        "name": "skubana_access_token",
+                        "type": "any",
+                        "label": "skubana_access_token"
+                    },
+                    {
+                        "name": "v_receipt_1",
+                        "type": "any",
+                        "label": "v_receipt_1"
+                    },
+                    {
+                        "name": "GET: Skubana Products",
+                        "type": "any",
+                        "label": "GET: Skubana Products"
+                    },
+                    {
+                        "name": "GET: Single Skubana Product",
+                        "type": "any",
+                        "label": "GET: Single Skubana Product"
+                    },
+                    {
+                        "name": "PUT: Skubana Core",
+                        "type": "any",
+                        "label": "PUT: Skubana Core"
+                    },
+                    {
+                        "name": "PUT: Skubana Bundles",
+                        "type": "any",
+                        "label": "PUT: Skubana Bundles"
+                    },
+                    {
+                        "name": "GET: Skubana Vendor SKU",
+                        "type": "any",
+                        "label": "GET: Skubana Vendor SKU"
+                    },
+                    {
+                        "name": "PUT: Create Vendor SKU",
+                        "type": "any",
+                        "label": "PUT: Create Vendor SKU"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 4,
+            "module": "airtable:ActionGetRecord",
+            "version": 3,
+            "parameters": {
+                "__IMTCONN__": 589530
+            },
+            "mapper": {
+                "id": "{{18.recordID}}",
+                "base": "appQD8vyOEbpbsJR9",
+                "table": "SKUs",
+                "useColumnId": false
+            },
+            "metadata": {
+                "designer": {
+                    "x": 900,
+                    "y": 150,
+                    "name": "PIM - Get SKU Record"
+                },
+                "restore": {
+                    "base": {
+                        "mode": "chose",
+                        "label": "Nolk PIM V2"
+                    },
+                    "table": {
+                        "mode": "chose",
+                        "label": "SKUs"
+                    },
+                    "__IMTCONN__": {
+                        "label": "Nolk OS Airtable"
+                    },
+                    "useColumnId": {
+                        "mode": "chose"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "base",
+                        "type": "select",
+                        "label": "Base",
+                        "required": true
+                    },
+                    {
+                        "name": "useColumnId",
+                        "type": "boolean",
+                        "label": "Use Column ID",
+                        "required": true
+                    },
+                    {
+                        "name": "table",
+                        "type": "select",
+                        "label": "Table",
+                        "required": true
+                    },
+                    {
+                        "name": "id",
+                        "type": "text",
+                        "label": "Record ID",
+                        "required": true
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "id",
+                        "type": "text",
+                        "label": "ID"
+                    },
+                    {
+                        "name": "createdTime",
+                        "type": "date",
+                        "label": "Created Time"
+                    },
+                    {
+                        "name": "Nolk SKU",
+                        "type": "text",
+                        "label": "Nolk SKU"
+                    },
+                    {
+                        "name": "Status",
+                        "type": "text",
+                        "label": "Status"
+                    },
+                    {
+                        "name": "Sync Master SKU",
+                        "spec": [
+                            {
+                                "name": "label",
+                                "type": "text",
+                                "label": "Label"
+                            },
+                            {
+                                "name": "url",
+                                "type": "url",
+                                "label": "URL"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Sync Master SKU"
+                    },
+                    {
+                        "name": "Marketing Name",
+                        "type": "text",
+                        "label": "Marketing Name"
+                    },
+                    {
+                        "name": "Brand",
+                        "spec": {
+                            "label": "Record ID"
+                        },
+                        "type": "array",
+                        "label": "Brand"
+                    },
+                    {
+                        "name": "Product Type",
+                        "spec": {
+                            "label": "Record ID"
+                        },
+                        "type": "array",
+                        "label": "Product Type"
+                    },
+                    {
+                        "name": "Model (m)",
+                        "spec": {
+                            "label": "Record ID"
+                        },
+                        "type": "array",
+                        "label": "Model (m)"
+                    },
+                    {
+                        "name": "Variant (v)",
+                        "spec": {
+                            "label": "Record ID"
+                        },
+                        "type": "array",
+                        "label": "Variant (v)"
+                    },
+                    {
+                        "name": "Color (c)",
+                        "spec": {
+                            "label": "Record ID"
+                        },
+                        "type": "array",
+                        "label": "Color (c)"
+                    },
+                    {
+                        "name": "Size (s)",
+                        "spec": {
+                            "label": "Record ID"
+                        },
+                        "type": "array",
+                        "label": "Size (s)"
+                    },
+                    {
+                        "name": "Labels",
+                        "spec": {
+                            "label": "Record ID"
+                        },
+                        "type": "array",
+                        "label": "Labels"
+                    },
+                    {
+                        "name": "UPC",
+                        "type": "text",
+                        "label": "UPC"
+                    },
+                    {
+                        "name": "Vendor",
+                        "spec": {
+                            "label": "Record ID"
+                        },
+                        "type": "array",
+                        "label": "Vendor"
+                    },
+                    {
+                        "name": "Master SKU",
+                        "type": "text",
+                        "label": "Master SKU"
+                    },
+                    {
+                        "name": "Master SKU - Sync Status",
+                        "type": "text",
+                        "label": "Master SKU - Sync Status"
+                    },
+                    {
+                        "name": "Master SKU - Synced Date",
+                        "time": true,
+                        "type": "date",
+                        "label": "Master SKU - Synced Date"
+                    },
+                    {
+                        "name": "Nolk Name",
+                        "type": "text",
+                        "label": "Nolk Name"
+                    },
+                    {
+                        "name": "Version (x)",
+                        "spec": {
+                            "label": "Record ID"
+                        },
+                        "type": "array",
+                        "label": "Version (x)"
+                    },
+                    {
+                        "name": "Bundled Product 1",
+                        "spec": {
+                            "label": "Record ID"
+                        },
+                        "type": "array",
+                        "label": "Bundled Product 1"
+                    },
+                    {
+                        "name": "Quantity 1",
+                        "type": "number",
+                        "label": "Quantity 1"
+                    },
+                    {
+                        "name": "Bundled Product 2",
+                        "spec": {
+                            "label": "Record ID"
+                        },
+                        "type": "array",
+                        "label": "Bundled Product 2"
+                    },
+                    {
+                        "name": "Quantity 2",
+                        "type": "number",
+                        "label": "Quantity 2"
+                    },
+                    {
+                        "name": "Bundled Product 3",
+                        "spec": {
+                            "label": "Record ID"
+                        },
+                        "type": "array",
+                        "label": "Bundled Product 3"
+                    },
+                    {
+                        "name": "Quantity 3",
+                        "type": "number",
+                        "label": "Quantity 3"
+                    },
+                    {
+                        "name": "Bundled Product 4",
+                        "spec": {
+                            "label": "Record ID"
+                        },
+                        "type": "array",
+                        "label": "Bundled Product 4"
+                    },
+                    {
+                        "name": "Quantity 4",
+                        "type": "number",
+                        "label": "Quantity 4"
+                    },
+                    {
+                        "name": "Bundled Product 5",
+                        "spec": {
+                            "label": "Record ID"
+                        },
+                        "type": "array",
+                        "label": "Bundled Product 5"
+                    },
+                    {
+                        "name": "Quantity 5",
+                        "type": "number",
+                        "label": "Quantity 5"
+                    },
+                    {
+                        "name": "Last Modified",
+                        "time": true,
+                        "type": "date",
+                        "label": "Last Modified"
+                    },
+                    {
+                        "name": "Created",
+                        "time": true,
+                        "type": "date",
+                        "label": "Created"
+                    },
+                    {
+                        "name": "Default Name",
+                        "type": "text",
+                        "label": "Default Name"
+                    },
+                    {
+                        "name": "SKU Type",
+                        "type": "text",
+                        "label": "SKU Type"
+                    },
+                    {
+                        "name": "Standardized SKU",
+                        "type": "text",
+                        "label": "Standardized SKU"
+                    },
+                    {
+                        "name": "Skubana - Product Id",
+                        "type": "text",
+                        "label": "Skubana - Product Id"
+                    },
+                    {
+                        "name": "Weight",
+                        "type": "number",
+                        "label": "Weight"
+                    },
+                    {
+                        "name": "Weight Unit",
+                        "type": "text",
+                        "label": "Weight Unit"
+                    },
+                    {
+                        "name": "Weight (grams)",
+                        "type": "text",
+                        "label": "Weight (grams)"
+                    },
+                    {
+                        "name": "Default Vendor SKU",
+                        "spec": [
+                            {
+                                "name": "label",
+                                "type": "text",
+                                "label": "Label"
+                            },
+                            {
+                                "name": "url",
+                                "type": "url",
+                                "label": "URL"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Default Vendor SKU"
+                    },
+                    {
+                        "name": "Default Vendor SKU - Status",
+                        "type": "text",
+                        "label": "Default Vendor SKU - Status"
+                    },
+                    {
+                        "name": "Create Default Vendor SKU",
+                        "type": "text",
+                        "label": "Create Default Vendor SKU"
+                    },
+                    {
+                        "name": "Description",
+                        "type": "text",
+                        "label": "Description",
+                        "multiline": true
+                    },
+                    {
+                        "name": "Abbreviation (from Brand)",
+                        "type": "array",
+                        "label": "Abbreviation (from Brand)"
+                    },
+                    {
+                        "name": "Abbreviation (from Product Type)",
+                        "type": "array",
+                        "label": "Abbreviation (from Product Type)"
+                    },
+                    {
+                        "name": "Abbreviation (from Model (m))",
+                        "type": "array",
+                        "label": "Abbreviation (from Model (m))"
+                    },
+                    {
+                        "name": "Abbreviation (from Variant (v))",
+                        "type": "array",
+                        "label": "Abbreviation (from Variant (v))"
+                    },
+                    {
+                        "name": "Abbreviation (from Size (s))",
+                        "type": "array",
+                        "label": "Abbreviation (from Size (s))"
+                    },
+                    {
+                        "name": "Abbreviation (from Color (c))",
+                        "type": "array",
+                        "label": "Abbreviation (from Color (c))"
+                    },
+                    {
+                        "name": "Abbreviation (from Version (x))",
+                        "type": "array",
+                        "label": "Abbreviation (from Version (x))"
+                    },
+                    {
+                        "name": "Master SKUs from OMS's",
+                        "type": "text",
+                        "label": "Master SKUs from OMS's"
+                    },
+                    {
+                        "name": "Change?",
+                        "type": "text",
+                        "label": "Change?"
+                    },
+                    {
+                        "name": "Name (from Brand)",
+                        "type": "array",
+                        "label": "Name (from Brand)"
+                    },
+                    {
+                        "name": "Value (from Product Type)",
+                        "type": "array",
+                        "label": "Value (from Product Type)"
+                    },
+                    {
+                        "name": "Value (from Model (m))",
+                        "type": "array",
+                        "label": "Value (from Model (m))"
+                    },
+                    {
+                        "name": "Value (from Variant (v))",
+                        "type": "array",
+                        "label": "Value (from Variant (v))"
+                    },
+                    {
+                        "name": "Value (from Size (s))",
+                        "type": "array",
+                        "label": "Value (from Size (s))"
+                    },
+                    {
+                        "name": "Value (from Color (c))",
+                        "type": "array",
+                        "label": "Value (from Color (c))"
+                    },
+                    {
+                        "name": "Value (from Version (x))",
+                        "type": "array",
+                        "label": "Value (from Version (x))"
+                    },
+                    {
+                        "name": "Value (from Labels)",
+                        "type": "array",
+                        "label": "Value (from Labels)"
+                    },
+                    {
+                        "name": "Nolk SKU (from Bundled Product 1)",
+                        "type": "array",
+                        "label": "Nolk SKU (from Bundled Product 1)"
+                    },
+                    {
+                        "name": "Nolk SKU (from Bundled Product 2)",
+                        "type": "array",
+                        "label": "Nolk SKU (from Bundled Product 2)"
+                    },
+                    {
+                        "name": "Nolk SKU (from Bundled Product 3)",
+                        "type": "array",
+                        "label": "Nolk SKU (from Bundled Product 3)"
+                    },
+                    {
+                        "name": "Nolk SKU (from Bundled Product 4)",
+                        "type": "array",
+                        "label": "Nolk SKU (from Bundled Product 4)"
+                    },
+                    {
+                        "name": "Nolk SKU (from Bundled Product 5)",
+                        "type": "array",
+                        "label": "Nolk SKU (from Bundled Product 5)"
+                    },
+                    {
+                        "name": "Skubana - Product Id (from Bundled Product 1)",
+                        "type": "array",
+                        "label": "Skubana - Product Id (from Bundled Product 1)"
+                    },
+                    {
+                        "name": "Skubana - Product Id (from Bundled Product 2)",
+                        "type": "array",
+                        "label": "Skubana - Product Id (from Bundled Product 2)"
+                    },
+                    {
+                        "name": "Skubana - Product Id (from Bundled Product 3)",
+                        "type": "array",
+                        "label": "Skubana - Product Id (from Bundled Product 3)"
+                    },
+                    {
+                        "name": "Skubana - Product Id (from Bundled Product 4)",
+                        "type": "array",
+                        "label": "Skubana - Product Id (from Bundled Product 4)"
+                    },
+                    {
+                        "name": "Skubana - Product Id (from Bundled Product 5)",
+                        "type": "array",
+                        "label": "Skubana - Product Id (from Bundled Product 5)"
+                    },
+                    {
+                        "name": "Listings",
+                        "type": "text",
+                        "label": "Listings"
+                    },
+                    {
+                        "name": "Listings 2",
+                        "spec": {
+                            "label": "Record ID"
+                        },
+                        "type": "array",
+                        "label": "Listings 2"
+                    },
+                    {
+                        "name": "Created By",
+                        "type": "text",
+                        "label": "Created By"
+                    },
+                    {
+                        "name": "Last Modified By",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "text",
+                                "label": "ID"
+                            },
+                            {
+                                "name": "email",
+                                "type": "text",
+                                "label": "Email"
+                            },
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Last Modified By"
+                    },
+                    {
+                        "name": "Default Vendor SKU - Skubana Id",
+                        "type": "number",
+                        "label": "Default Vendor SKU - Skubana Id"
+                    },
+                    {
+                        "name": "Default Vendor SKU - Synced Date",
+                        "time": true,
+                        "type": "date",
+                        "label": "Default Vendor SKU - Synced Date"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 14,
+            "module": "airtable:ActionGetRecord",
+            "version": 3,
+            "parameters": {
+                "__IMTCONN__": 589532
+            },
+            "filter": {
+                "name": "if have vendor",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{4.Vendor[]}}",
+                            "b": "",
+                            "o": "exist"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "id": "{{4.Vendor[]}}",
+                "base": "appQD8vyOEbpbsJR9",
+                "table": "Vendors",
+                "useColumnId": false
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1200,
+                    "y": 150,
+                    "name": "PIM - Get Vendor Record"
+                },
+                "restore": {
+                    "base": {
+                        "mode": "chose",
+                        "label": "Nolk PIM V2"
+                    },
+                    "table": {
+                        "mode": "chose",
+                        "label": "Vendors"
+                    },
+                    "__IMTCONN__": {
+                        "label": "My Airtable connection"
+                    },
+                    "useColumnId": {
+                        "mode": "chose"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "base",
+                        "type": "select",
+                        "label": "Base",
+                        "required": true
+                    },
+                    {
+                        "name": "useColumnId",
+                        "type": "boolean",
+                        "label": "Use Column ID",
+                        "required": true
+                    },
+                    {
+                        "name": "table",
+                        "type": "select",
+                        "label": "Table",
+                        "required": true
+                    },
+                    {
+                        "name": "id",
+                        "type": "text",
+                        "label": "Record ID",
+                        "required": true
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "id",
+                        "type": "text",
+                        "label": "ID"
+                    },
+                    {
+                        "name": "createdTime",
+                        "type": "date",
+                        "label": "Created Time"
+                    },
+                    {
+                        "name": "Name",
+                        "type": "text",
+                        "label": "Name"
+                    },
+                    {
+                        "name": "Country",
+                        "type": "text",
+                        "label": "Country"
+                    },
+                    {
+                        "name": "City",
+                        "type": "text",
+                        "label": "City"
+                    },
+                    {
+                        "name": "Address",
+                        "type": "text",
+                        "label": "Address",
+                        "multiline": true
+                    },
+                    {
+                        "name": "Contact Email",
+                        "type": "text",
+                        "label": "Contact Email"
+                    },
+                    {
+                        "name": "Purchase Order Email",
+                        "type": "text",
+                        "label": "Purchase Order Email"
+                    },
+                    {
+                        "name": "Contact Phone",
+                        "type": "text",
+                        "label": "Contact Phone"
+                    },
+                    {
+                        "name": "Dropshipper?",
+                        "type": "text",
+                        "label": "Dropshipper?"
+                    },
+                    {
+                        "name": "Manufacturer?",
+                        "type": "text",
+                        "label": "Manufacturer?"
+                    },
+                    {
+                        "name": "Supplier?",
+                        "type": "text",
+                        "label": "Supplier?"
+                    },
+                    {
+                        "name": "Skubana ID",
+                        "type": "number",
+                        "label": "Skubana ID"
+                    },
+                    {
+                        "name": "Zip Code",
+                        "type": "text",
+                        "label": "Zip Code"
+                    },
+                    {
+                        "name": "SKUs",
+                        "spec": {
+                            "label": "Record ID"
+                        },
+                        "type": "array",
+                        "label": "SKUs"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 1,
+            "module": "http:ActionSendData",
+            "version": 3,
+            "parameters": {
+                "handleErrors": false,
+                "useNewZLibDeCompress": "true"
+            },
+            "mapper": {
+                "ca": "",
+                "qs": [
+                    {
+                        "name": "vendorId",
+                        "value": "{{14.`Skubana ID`}}"
+                    },
+                    {
+                        "name": "productId",
+                        "value": "{{4.`Skubana - Product Id`}}"
+                    }
+                ],
+                "url": "{{3.skubana_api_slug}}{{3.`GET: Skubana Vendor SKU`}}",
+                "gzip": true,
+                "method": "get",
+                "headers": [
+                    {
+                        "name": "Authorization",
+                        "value": "Bearer {{3.skubana_access_token}}"
+                    }
+                ],
+                "timeout": "",
+                "useMtls": false,
+                "authPass": "",
+                "authUser": "",
+                "bodyType": "",
+                "serializeUrl": false,
+                "shareCookies": false,
+                "parseResponse": true,
+                "followRedirect": true,
+                "useQuerystring": false,
+                "followAllRedirects": false,
+                "rejectUnauthorized": true
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1500,
+                    "y": 150,
+                    "name": "Skubana - Search Vendor SKU"
+                },
+                "restore": {
+                    "qs": {
+                        "mode": "chose",
+                        "items": [
+                            "undefined",
+                            "undefined"
+                        ]
+                    },
+                    "method": {
+                        "mode": "chose",
+                        "label": "GET"
+                    },
+                    "headers": {
+                        "mode": "chose",
+                        "items": [
+                            "undefined"
+                        ]
+                    },
+                    "bodyType": {
+                        "label": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "handleErrors",
+                        "type": "boolean",
+                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                        "required": true
+                    },
+                    {
+                        "name": "useNewZLibDeCompress",
+                        "type": "hidden"
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "url",
+                        "type": "url",
+                        "label": "URL",
+                        "required": true
+                    },
+                    {
+                        "name": "serializeUrl",
+                        "type": "boolean",
+                        "label": "Serialize URL",
+                        "required": true
+                    },
+                    {
+                        "name": "method",
+                        "type": "select",
+                        "label": "Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "get",
+                                "head",
+                                "post",
+                                "put",
+                                "patch",
+                                "delete",
+                                "options"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "headers",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Headers",
+                        "labels": {
+                            "add": "Add a header",
+                            "edit": "Edit a header"
+                        }
+                    },
+                    {
+                        "name": "qs",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Query String",
+                        "labels": {
+                            "add": "Add parameter",
+                            "edit": "Edit parameter"
+                        }
+                    },
+                    {
+                        "name": "bodyType",
+                        "type": "select",
+                        "label": "Body type",
+                        "validate": {
+                            "enum": [
+                                "raw",
+                                "x_www_form_urlencoded",
+                                "multipart_form_data"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "parseResponse",
+                        "type": "boolean",
+                        "label": "Parse response",
+                        "required": true
+                    },
+                    {
+                        "name": "authUser",
+                        "type": "text",
+                        "label": "User name"
+                    },
+                    {
+                        "name": "authPass",
+                        "type": "password",
+                        "label": "Password"
+                    },
+                    {
+                        "name": "timeout",
+                        "type": "uinteger",
+                        "label": "Timeout",
+                        "validate": {
+                            "max": 300,
+                            "min": 1
+                        }
+                    },
+                    {
+                        "name": "shareCookies",
+                        "type": "boolean",
+                        "label": "Share cookies with other HTTP modules",
+                        "required": true
+                    },
+                    {
+                        "name": "ca",
+                        "type": "cert",
+                        "label": "Self-signed certificate",
+                        "multiline": true
+                    },
+                    {
+                        "name": "rejectUnauthorized",
+                        "type": "boolean",
+                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                        "required": true
+                    },
+                    {
+                        "name": "followRedirect",
+                        "type": "boolean",
+                        "label": "Follow redirect",
+                        "required": true
+                    },
+                    {
+                        "name": "useQuerystring",
+                        "type": "boolean",
+                        "label": "Disable serialization of multiple same query string keys as arrays",
+                        "required": true
+                    },
+                    {
+                        "name": "gzip",
+                        "type": "boolean",
+                        "label": "Request compressed content",
+                        "required": true
+                    },
+                    {
+                        "name": "useMtls",
+                        "type": "boolean",
+                        "label": "Use Mutual TLS",
+                        "required": true
+                    },
+                    {
+                        "name": "followAllRedirects",
+                        "type": "boolean",
+                        "label": "Follow all redirect",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 7,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "parameters": {
+                "else": 1
+            },
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": 1800,
+                    "y": 150
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 15,
+                            "module": "airtable:ActionUpdateRecords",
+                            "version": 3,
+                            "parameters": {
+                                "__IMTCONN__": 589530
+                            },
+                            "filter": {
+                                "name": "Existed Vendor SKU",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{1.statusCode}}",
+                                            "b": "200",
+                                            "o": "text:equal"
+                                        },
+                                        {
+                                            "a": "{{1.data[].vendorProductId}}",
+                                            "b": "",
+                                            "o": "exist"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "id": "{{4.id}}",
+                                "base": "appQD8vyOEbpbsJR9",
+                                "table": "SKUs",
+                                "record": {
+                                    "fldAeXolSnyeuhu4m": "{{1.data[].vendorProductId}}",
+                                    "fldSFCVpEQabgZ5pV": "{{now}}",
+                                    "fldrbEhPVHi6LcRkL": {},
+                                    "fldz77IrG0XXGWJps": "{{1.data[].vendorSku}}"
+                                },
+                                "typecast": false,
+                                "useColumnId": false
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 2100,
+                                    "y": 0,
+                                    "name": "PIM - Update Vendor SKU"
+                                },
+                                "restore": {
+                                    "base": {
+                                        "label": "Nolk PIM V2"
+                                    },
+                                    "table": {
+                                        "label": "SKUs"
+                                    },
+                                    "record": {
+                                        "nested": {
+                                            "fld2CgCoUbt0sL9Po": {
+                                                "mode": "chose",
+                                                "items": []
+                                            },
+                                            "fld81lqSJsFKTjFAm": {
+                                                "mode": "chose",
+                                                "items": []
+                                            },
+                                            "fldDqPESFKQbYEeee": {
+                                                "mode": "chose",
+                                                "items": []
+                                            },
+                                            "fldDxHcq2RNVA9jvo": {
+                                                "mode": "chose",
+                                                "items": []
+                                            },
+                                            "fldIMl2RhV7dNJhax": {
+                                                "mode": "chose",
+                                                "items": []
+                                            },
+                                            "fldIbqfzc5IIZcY8w": {
+                                                "mode": "chose",
+                                                "items": []
+                                            },
+                                            "fldL6K5AJQeIneaAv": {
+                                                "mode": "chose",
+                                                "items": []
+                                            },
+                                            "fldN1P1bjnuUISyBF": {
+                                                "mode": "chose",
+                                                "items": []
+                                            },
+                                            "fldRFMoSw3YiNeV0b": {
+                                                "mode": "chose",
+                                                "items": []
+                                            },
+                                            "flddIODjJullfqNrN": {
+                                                "mode": "chose",
+                                                "items": []
+                                            },
+                                            "fldhDKAlQByzwmsSI": {
+                                                "mode": "chose",
+                                                "items": []
+                                            },
+                                            "fldiRLVsqcaUdBjn6": {
+                                                "mode": "chose",
+                                                "items": []
+                                            },
+                                            "flduoGZUdw4RUpCim": {
+                                                "mode": "chose",
+                                                "items": []
+                                            },
+                                            "fldwDdESPPzxVun1L": {
+                                                "mode": "chose",
+                                                "items": []
+                                            },
+                                            "fldxAa1TAiZhvdyIn": {
+                                                "mode": "chose",
+                                                "items": []
+                                            }
+                                        }
+                                    },
+                                    "typecast": {
+                                        "mode": "chose"
+                                    },
+                                    "__IMTCONN__": {
+                                        "label": "Nolk OS Airtable"
+                                    },
+                                    "useColumnId": {
+                                        "mode": "chose"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "base",
+                                        "type": "select",
+                                        "label": "Base",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "typecast",
+                                        "type": "boolean",
+                                        "label": "Smart links",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useColumnId",
+                                        "type": "boolean",
+                                        "label": "Use Column ID",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "table",
+                                        "type": "select",
+                                        "label": "Table",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "id",
+                                        "type": "text",
+                                        "label": "Record ID",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "record",
+                                        "spec": [
+                                            {
+                                                "name": "fldrbEhPVHi6LcRkL",
+                                                "spec": [
+                                                    {
+                                                        "name": "id",
+                                                        "type": "text",
+                                                        "label": "ID"
+                                                    },
+                                                    {
+                                                        "name": "email",
+                                                        "type": "text",
+                                                        "label": "Email"
+                                                    },
+                                                    {
+                                                        "name": "name",
+                                                        "type": "text",
+                                                        "label": "Name"
+                                                    }
+                                                ],
+                                                "type": "collection",
+                                                "label": "Last Modified By"
+                                            },
+                                            {
+                                                "name": "fldZwwiN4H2ENI6Wf",
+                                                "type": "text",
+                                                "label": "Status"
+                                            },
+                                            {
+                                                "name": "fldQZG7psRfTeFf1s",
+                                                "type": "text",
+                                                "label": "Marketing Name"
+                                            },
+                                            {
+                                                "name": "flddIODjJullfqNrN",
+                                                "spec": {
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "Brand"
+                                            },
+                                            {
+                                                "name": "fldDqPESFKQbYEeee",
+                                                "spec": {
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "Product Type"
+                                            },
+                                            {
+                                                "name": "fldIbqfzc5IIZcY8w",
+                                                "spec": {
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "Model (m)"
+                                            },
+                                            {
+                                                "name": "fldIMl2RhV7dNJhax",
+                                                "spec": {
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "Variant (v)"
+                                            },
+                                            {
+                                                "name": "fldL6K5AJQeIneaAv",
+                                                "spec": {
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "Color (c)"
+                                            },
+                                            {
+                                                "name": "fldiRLVsqcaUdBjn6",
+                                                "spec": {
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "Size (s)"
+                                            },
+                                            {
+                                                "name": "flduoGZUdw4RUpCim",
+                                                "spec": {
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "Labels"
+                                            },
+                                            {
+                                                "name": "fld5YQqZjoRCvR4lL",
+                                                "type": "text",
+                                                "label": "UPC"
+                                            },
+                                            {
+                                                "name": "fldDxHcq2RNVA9jvo",
+                                                "spec": {
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "Vendor"
+                                            },
+                                            {
+                                                "name": "fldke8H7hc4qBx3eG",
+                                                "type": "text",
+                                                "label": "Master SKU"
+                                            },
+                                            {
+                                                "name": "fldCXvHkPk3sSaIzr",
+                                                "time": true,
+                                                "type": "date",
+                                                "label": "Master SKU - Synced Date"
+                                            },
+                                            {
+                                                "name": "fldwDdESPPzxVun1L",
+                                                "spec": {
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "Version (x)"
+                                            },
+                                            {
+                                                "name": "fldxAa1TAiZhvdyIn",
+                                                "spec": {
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "Bundled Product 1"
+                                            },
+                                            {
+                                                "name": "fldtWyb1HbwT35sKX",
+                                                "type": "number",
+                                                "label": "Quantity 1"
+                                            },
+                                            {
+                                                "name": "fld81lqSJsFKTjFAm",
+                                                "spec": {
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "Bundled Product 2"
+                                            },
+                                            {
+                                                "name": "fldAp2crFFT5ywHTc",
+                                                "type": "number",
+                                                "label": "Quantity 2"
+                                            },
+                                            {
+                                                "name": "fld2CgCoUbt0sL9Po",
+                                                "spec": {
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "Bundled Product 3"
+                                            },
+                                            {
+                                                "name": "fldk2IBy6zyLNMMii",
+                                                "type": "number",
+                                                "label": "Quantity 3"
+                                            },
+                                            {
+                                                "name": "fldRFMoSw3YiNeV0b",
+                                                "spec": {
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "Bundled Product 4"
+                                            },
+                                            {
+                                                "name": "fld3g6z4NUT3bzOWR",
+                                                "type": "number",
+                                                "label": "Quantity 4"
+                                            },
+                                            {
+                                                "name": "fldhDKAlQByzwmsSI",
+                                                "spec": {
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "Bundled Product 5"
+                                            },
+                                            {
+                                                "name": "fldYKY0JqGGyJA1uY",
+                                                "type": "number",
+                                                "label": "Quantity 5"
+                                            },
+                                            {
+                                                "name": "fldCVbo3TYXuFkGhB",
+                                                "time": true,
+                                                "type": "date",
+                                                "label": "Last Modified"
+                                            },
+                                            {
+                                                "name": "fldEB2e5pqF59WQu5",
+                                                "time": true,
+                                                "type": "date",
+                                                "label": "Created"
+                                            },
+                                            {
+                                                "name": "fldZwPDHceXUWoTSy",
+                                                "type": "text",
+                                                "label": "Skubana - Product Id"
+                                            },
+                                            {
+                                                "name": "fldXyITJLCeNROjYS",
+                                                "type": "number",
+                                                "label": "Weight"
+                                            },
+                                            {
+                                                "name": "fldW3rOA3gHO1fmB6",
+                                                "type": "text",
+                                                "label": "Weight Unit"
+                                            },
+                                            {
+                                                "name": "fldgcGwFtoudn86em",
+                                                "type": "text",
+                                                "label": "Description",
+                                                "multiline": true
+                                            },
+                                            {
+                                                "name": "fldvGmweQvWNKwd8m",
+                                                "type": "text",
+                                                "label": "Master SKUs from OMS's"
+                                            },
+                                            {
+                                                "name": "fldVGKlWfBduDu660",
+                                                "type": "text",
+                                                "label": "Listings"
+                                            },
+                                            {
+                                                "name": "fldN1P1bjnuUISyBF",
+                                                "spec": {
+                                                    "label": "Record ID"
+                                                },
+                                                "type": "array",
+                                                "label": "Listings 2"
+                                            },
+                                            {
+                                                "name": "fldAeXolSnyeuhu4m",
+                                                "type": "number",
+                                                "label": "Default Vendor SKU - Skubana Id"
+                                            },
+                                            {
+                                                "name": "fldSFCVpEQabgZ5pV",
+                                                "time": true,
+                                                "type": "date",
+                                                "label": "Default Vendor SKU - Synced Date"
+                                            },
+                                            {
+                                                "name": "fldz77IrG0XXGWJps",
+                                                "type": "text",
+                                                "label": "Default Vendor SKU"
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "Record"
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "id",
+                                        "type": "text",
+                                        "label": "ID"
+                                    },
+                                    {
+                                        "name": "createdTime",
+                                        "type": "date",
+                                        "label": "Created Time"
+                                    },
+                                    {
+                                        "name": "Nolk SKU",
+                                        "type": "text",
+                                        "label": "Nolk SKU"
+                                    },
+                                    {
+                                        "name": "Status",
+                                        "type": "text",
+                                        "label": "Status"
+                                    },
+                                    {
+                                        "name": "Sync Master SKU",
+                                        "spec": [
+                                            {
+                                                "name": "label",
+                                                "type": "text",
+                                                "label": "Label"
+                                            },
+                                            {
+                                                "name": "url",
+                                                "type": "url",
+                                                "label": "URL"
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "Sync Master SKU"
+                                    },
+                                    {
+                                        "name": "Marketing Name",
+                                        "type": "text",
+                                        "label": "Marketing Name"
+                                    },
+                                    {
+                                        "name": "Brand",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "Brand"
+                                    },
+                                    {
+                                        "name": "Product Type",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "Product Type"
+                                    },
+                                    {
+                                        "name": "Model (m)",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "Model (m)"
+                                    },
+                                    {
+                                        "name": "Variant (v)",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "Variant (v)"
+                                    },
+                                    {
+                                        "name": "Color (c)",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "Color (c)"
+                                    },
+                                    {
+                                        "name": "Size (s)",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "Size (s)"
+                                    },
+                                    {
+                                        "name": "Labels",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "Labels"
+                                    },
+                                    {
+                                        "name": "UPC",
+                                        "type": "text",
+                                        "label": "UPC"
+                                    },
+                                    {
+                                        "name": "Vendor",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "Vendor"
+                                    },
+                                    {
+                                        "name": "Master SKU",
+                                        "type": "text",
+                                        "label": "Master SKU"
+                                    },
+                                    {
+                                        "name": "Master SKU - Sync Status",
+                                        "type": "text",
+                                        "label": "Master SKU - Sync Status"
+                                    },
+                                    {
+                                        "name": "Master SKU - Synced Date",
+                                        "time": true,
+                                        "type": "date",
+                                        "label": "Master SKU - Synced Date"
+                                    },
+                                    {
+                                        "name": "Nolk Name",
+                                        "type": "text",
+                                        "label": "Nolk Name"
+                                    },
+                                    {
+                                        "name": "Version (x)",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "Version (x)"
+                                    },
+                                    {
+                                        "name": "Bundled Product 1",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "Bundled Product 1"
+                                    },
+                                    {
+                                        "name": "Quantity 1",
+                                        "type": "number",
+                                        "label": "Quantity 1"
+                                    },
+                                    {
+                                        "name": "Bundled Product 2",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "Bundled Product 2"
+                                    },
+                                    {
+                                        "name": "Quantity 2",
+                                        "type": "number",
+                                        "label": "Quantity 2"
+                                    },
+                                    {
+                                        "name": "Bundled Product 3",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "Bundled Product 3"
+                                    },
+                                    {
+                                        "name": "Quantity 3",
+                                        "type": "number",
+                                        "label": "Quantity 3"
+                                    },
+                                    {
+                                        "name": "Bundled Product 4",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "Bundled Product 4"
+                                    },
+                                    {
+                                        "name": "Quantity 4",
+                                        "type": "number",
+                                        "label": "Quantity 4"
+                                    },
+                                    {
+                                        "name": "Bundled Product 5",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "Bundled Product 5"
+                                    },
+                                    {
+                                        "name": "Quantity 5",
+                                        "type": "number",
+                                        "label": "Quantity 5"
+                                    },
+                                    {
+                                        "name": "Last Modified",
+                                        "time": true,
+                                        "type": "date",
+                                        "label": "Last Modified"
+                                    },
+                                    {
+                                        "name": "Created",
+                                        "time": true,
+                                        "type": "date",
+                                        "label": "Created"
+                                    },
+                                    {
+                                        "name": "Default Name",
+                                        "type": "text",
+                                        "label": "Default Name"
+                                    },
+                                    {
+                                        "name": "SKU Type",
+                                        "type": "text",
+                                        "label": "SKU Type"
+                                    },
+                                    {
+                                        "name": "Standardized SKU",
+                                        "type": "text",
+                                        "label": "Standardized SKU"
+                                    },
+                                    {
+                                        "name": "Skubana - Product Id",
+                                        "type": "text",
+                                        "label": "Skubana - Product Id"
+                                    },
+                                    {
+                                        "name": "Weight",
+                                        "type": "number",
+                                        "label": "Weight"
+                                    },
+                                    {
+                                        "name": "Weight Unit",
+                                        "type": "text",
+                                        "label": "Weight Unit"
+                                    },
+                                    {
+                                        "name": "Weight (grams)",
+                                        "type": "text",
+                                        "label": "Weight (grams)"
+                                    },
+                                    {
+                                        "name": "Default Vendor SKU - Status",
+                                        "type": "text",
+                                        "label": "Default Vendor SKU - Status"
+                                    },
+                                    {
+                                        "name": "Create Default Vendor SKU",
+                                        "spec": [
+                                            {
+                                                "name": "label",
+                                                "type": "text",
+                                                "label": "Label"
+                                            },
+                                            {
+                                                "name": "url",
+                                                "type": "url",
+                                                "label": "URL"
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "Create Default Vendor SKU"
+                                    },
+                                    {
+                                        "name": "Description",
+                                        "type": "text",
+                                        "label": "Description",
+                                        "multiline": true
+                                    },
+                                    {
+                                        "name": "Abbreviation (from Brand)",
+                                        "type": "array",
+                                        "label": "Abbreviation (from Brand)"
+                                    },
+                                    {
+                                        "name": "Abbreviation (from Product Type)",
+                                        "type": "array",
+                                        "label": "Abbreviation (from Product Type)"
+                                    },
+                                    {
+                                        "name": "Abbreviation (from Model (m))",
+                                        "type": "array",
+                                        "label": "Abbreviation (from Model (m))"
+                                    },
+                                    {
+                                        "name": "Abbreviation (from Variant (v))",
+                                        "type": "array",
+                                        "label": "Abbreviation (from Variant (v))"
+                                    },
+                                    {
+                                        "name": "Abbreviation (from Size (s))",
+                                        "type": "array",
+                                        "label": "Abbreviation (from Size (s))"
+                                    },
+                                    {
+                                        "name": "Abbreviation (from Color (c))",
+                                        "type": "array",
+                                        "label": "Abbreviation (from Color (c))"
+                                    },
+                                    {
+                                        "name": "Abbreviation (from Version (x))",
+                                        "type": "array",
+                                        "label": "Abbreviation (from Version (x))"
+                                    },
+                                    {
+                                        "name": "Master SKUs from OMS's",
+                                        "type": "text",
+                                        "label": "Master SKUs from OMS's"
+                                    },
+                                    {
+                                        "name": "Change?",
+                                        "type": "text",
+                                        "label": "Change?"
+                                    },
+                                    {
+                                        "name": "Name (from Brand)",
+                                        "type": "array",
+                                        "label": "Name (from Brand)"
+                                    },
+                                    {
+                                        "name": "Value (from Product Type)",
+                                        "type": "array",
+                                        "label": "Value (from Product Type)"
+                                    },
+                                    {
+                                        "name": "Value (from Model (m))",
+                                        "type": "array",
+                                        "label": "Value (from Model (m))"
+                                    },
+                                    {
+                                        "name": "Value (from Variant (v))",
+                                        "type": "array",
+                                        "label": "Value (from Variant (v))"
+                                    },
+                                    {
+                                        "name": "Value (from Size (s))",
+                                        "type": "array",
+                                        "label": "Value (from Size (s))"
+                                    },
+                                    {
+                                        "name": "Value (from Color (c))",
+                                        "type": "array",
+                                        "label": "Value (from Color (c))"
+                                    },
+                                    {
+                                        "name": "Value (from Version (x))",
+                                        "type": "array",
+                                        "label": "Value (from Version (x))"
+                                    },
+                                    {
+                                        "name": "Value (from Labels)",
+                                        "type": "array",
+                                        "label": "Value (from Labels)"
+                                    },
+                                    {
+                                        "name": "Nolk SKU (from Bundled Product 1)",
+                                        "type": "array",
+                                        "label": "Nolk SKU (from Bundled Product 1)"
+                                    },
+                                    {
+                                        "name": "Nolk SKU (from Bundled Product 2)",
+                                        "type": "array",
+                                        "label": "Nolk SKU (from Bundled Product 2)"
+                                    },
+                                    {
+                                        "name": "Nolk SKU (from Bundled Product 3)",
+                                        "type": "array",
+                                        "label": "Nolk SKU (from Bundled Product 3)"
+                                    },
+                                    {
+                                        "name": "Nolk SKU (from Bundled Product 4)",
+                                        "type": "array",
+                                        "label": "Nolk SKU (from Bundled Product 4)"
+                                    },
+                                    {
+                                        "name": "Nolk SKU (from Bundled Product 5)",
+                                        "type": "array",
+                                        "label": "Nolk SKU (from Bundled Product 5)"
+                                    },
+                                    {
+                                        "name": "Skubana - Product Id (from Bundled Product 1)",
+                                        "type": "array",
+                                        "label": "Skubana - Product Id (from Bundled Product 1)"
+                                    },
+                                    {
+                                        "name": "Skubana - Product Id (from Bundled Product 2)",
+                                        "type": "array",
+                                        "label": "Skubana - Product Id (from Bundled Product 2)"
+                                    },
+                                    {
+                                        "name": "Skubana - Product Id (from Bundled Product 3)",
+                                        "type": "array",
+                                        "label": "Skubana - Product Id (from Bundled Product 3)"
+                                    },
+                                    {
+                                        "name": "Skubana - Product Id (from Bundled Product 4)",
+                                        "type": "array",
+                                        "label": "Skubana - Product Id (from Bundled Product 4)"
+                                    },
+                                    {
+                                        "name": "Skubana - Product Id (from Bundled Product 5)",
+                                        "type": "array",
+                                        "label": "Skubana - Product Id (from Bundled Product 5)"
+                                    },
+                                    {
+                                        "name": "Listings",
+                                        "type": "text",
+                                        "label": "Listings"
+                                    },
+                                    {
+                                        "name": "Listings 2",
+                                        "spec": {
+                                            "label": "Record ID"
+                                        },
+                                        "type": "array",
+                                        "label": "Listings 2"
+                                    },
+                                    {
+                                        "name": "Created By",
+                                        "type": "text",
+                                        "label": "Created By"
+                                    },
+                                    {
+                                        "name": "Last Modified By",
+                                        "spec": [
+                                            {
+                                                "name": "id",
+                                                "type": "text",
+                                                "label": "ID"
+                                            },
+                                            {
+                                                "name": "email",
+                                                "type": "text",
+                                                "label": "Email"
+                                            },
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name"
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "Last Modified By"
+                                    },
+                                    {
+                                        "name": "Default Vendor SKU - Skubana Id",
+                                        "type": "number",
+                                        "label": "Default Vendor SKU - Skubana Id"
+                                    },
+                                    {
+                                        "name": "Default Vendor SKU - Synced Date",
+                                        "time": true,
+                                        "type": "date",
+                                        "label": "Default Vendor SKU - Synced Date"
+                                    },
+                                    {
+                                        "name": "Default Vendor SKU",
+                                        "type": "text",
+                                        "label": "Default Vendor SKU"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 9,
+                            "module": "json:CreateJSON",
+                            "version": 1,
+                            "parameters": {
+                                "type": 36665,
+                                "space": ""
+                            },
+                            "filter": {
+                                "name": "New Vendor SKU",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{1.data[].vendorProductId}}",
+                                            "b": "",
+                                            "o": "notexist"
+                                        },
+                                        {
+                                            "a": "{{4.`Skubana - Product Id`}}",
+                                            "b": "",
+                                            "o": "exist"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "leadTime": "0",
+                                "vendorId": "{{14.`Skubana ID`}}",
+                                "productId": "{{4.`Skubana - Product Id`}}",
+                                "vendorSku": "{{4.`Nolk SKU`}}",
+                                "pricingTiers": [
+                                    {
+                                        "cost": {
+                                            "amount": "0",
+                                            "currency": "USD"
+                                        },
+                                        "toQuantity": "5000",
+                                        "fromQuantity": "1"
+                                    }
+                                ],
+                                "defaultProduct": true,
+                                "minOrderQuantity": "1"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 2100,
+                                    "y": 300,
+                                    "name": "Skubana - Vendor Products JSON"
+                                },
+                                "restore": {
+                                    "type": {
+                                        "label": "PIM - Skubana Vendor Products"
+                                    },
+                                    "space": {
+                                        "label": ""
+                                    },
+                                    "pricingTiers": {
+                                        "mode": "chose",
+                                        "items": [
+                                            "undefined"
+                                        ]
+                                    },
+                                    "defaultProduct": {
+                                        "mode": "chose"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "type",
+                                        "type": "udt",
+                                        "label": "Data structure",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "space",
+                                        "type": "select",
+                                        "label": "Indentation",
+                                        "validate": {
+                                            "enum": [
+                                                "tab",
+                                                "2",
+                                                "4"
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "leadTime",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "defaultProduct",
+                                        "type": "boolean"
+                                    },
+                                    {
+                                        "name": "minOrderQuantity",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "pricingTiers",
+                                        "spec": [
+                                            {
+                                                "name": "cost",
+                                                "spec": [
+                                                    {
+                                                        "name": "amount",
+                                                        "type": "number"
+                                                    },
+                                                    {
+                                                        "name": "currency",
+                                                        "type": "text"
+                                                    }
+                                                ],
+                                                "type": "collection"
+                                            },
+                                            {
+                                                "name": "fromQuantity",
+                                                "type": "number"
+                                            },
+                                            {
+                                                "name": "toQuantity",
+                                                "type": "number"
+                                            }
+                                        ],
+                                        "type": "array"
+                                    },
+                                    {
+                                        "name": "productId",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "vendorId",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "vendorSku",
+                                        "type": "text"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 10,
+                            "module": "http:ActionSendData",
+                            "version": 3,
+                            "parameters": {
+                                "handleErrors": false,
+                                "useNewZLibDeCompress": "true"
+                            },
+                            "mapper": {
+                                "ca": "",
+                                "qs": [],
+                                "url": "{{3.skubana_api_slug}}{{3.`PUT: Create Vendor SKU`}}",
+                                "data": "{{9.json}}",
+                                "gzip": true,
+                                "method": "put",
+                                "headers": [
+                                    {
+                                        "name": "Authorization",
+                                        "value": "Bearer {{3.skubana_access_token}}"
+                                    }
+                                ],
+                                "timeout": "",
+                                "useMtls": false,
+                                "authPass": "",
+                                "authUser": "",
+                                "bodyType": "raw",
+                                "contentType": "application/json",
+                                "serializeUrl": false,
+                                "shareCookies": false,
+                                "parseResponse": true,
+                                "followRedirect": true,
+                                "useQuerystring": false,
+                                "followAllRedirects": false,
+                                "rejectUnauthorized": true
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 2400,
+                                    "y": 300,
+                                    "name": "Skubana - Create Vendor Products"
+                                },
+                                "restore": {
+                                    "qs": {
+                                        "mode": "chose",
+                                        "items": []
+                                    },
+                                    "method": {
+                                        "mode": "chose",
+                                        "label": "PUT"
+                                    },
+                                    "headers": {
+                                        "mode": "chose",
+                                        "items": [
+                                            "undefined"
+                                        ]
+                                    },
+                                    "bodyType": {
+                                        "label": "Raw"
+                                    },
+                                    "contentType": {
+                                        "label": "JSON (application/json)"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "handleErrors",
+                                        "type": "boolean",
+                                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useNewZLibDeCompress",
+                                        "type": "hidden"
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "url",
+                                        "type": "url",
+                                        "label": "URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "serializeUrl",
+                                        "type": "boolean",
+                                        "label": "Serialize URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "method",
+                                        "type": "select",
+                                        "label": "Method",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "get",
+                                                "head",
+                                                "post",
+                                                "put",
+                                                "patch",
+                                                "delete",
+                                                "options"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Headers",
+                                        "labels": {
+                                            "add": "Add a header",
+                                            "edit": "Edit a header"
+                                        }
+                                    },
+                                    {
+                                        "name": "qs",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Query String",
+                                        "labels": {
+                                            "add": "Add parameter",
+                                            "edit": "Edit parameter"
+                                        }
+                                    },
+                                    {
+                                        "name": "bodyType",
+                                        "type": "select",
+                                        "label": "Body type",
+                                        "validate": {
+                                            "enum": [
+                                                "raw",
+                                                "x_www_form_urlencoded",
+                                                "multipart_form_data"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "parseResponse",
+                                        "type": "boolean",
+                                        "label": "Parse response",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "authUser",
+                                        "type": "text",
+                                        "label": "User name"
+                                    },
+                                    {
+                                        "name": "authPass",
+                                        "type": "password",
+                                        "label": "Password"
+                                    },
+                                    {
+                                        "name": "timeout",
+                                        "type": "uinteger",
+                                        "label": "Timeout",
+                                        "validate": {
+                                            "max": 300,
+                                            "min": 1
+                                        }
+                                    },
+                                    {
+                                        "name": "shareCookies",
+                                        "type": "boolean",
+                                        "label": "Share cookies with other HTTP modules",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "ca",
+                                        "type": "cert",
+                                        "label": "Self-signed certificate",
+                                        "multiline": true
+                                    },
+                                    {
+                                        "name": "rejectUnauthorized",
+                                        "type": "boolean",
+                                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "followRedirect",
+                                        "type": "boolean",
+                                        "label": "Follow redirect",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useQuerystring",
+                                        "type": "boolean",
+                                        "label": "Disable serialization of multiple same query string keys as arrays",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "gzip",
+                                        "type": "boolean",
+                                        "label": "Request compressed content",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useMtls",
+                                        "type": "boolean",
+                                        "label": "Use Mutual TLS",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "contentType",
+                                        "type": "select",
+                                        "label": "Content type",
+                                        "validate": {
+                                            "enum": [
+                                                "text/plain",
+                                                "application/json",
+                                                "application/xml",
+                                                "text/xml",
+                                                "text/html",
+                                                "custom"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "data",
+                                        "type": "buffer",
+                                        "label": "Request content"
+                                    },
+                                    {
+                                        "name": "followAllRedirects",
+                                        "type": "boolean",
+                                        "label": "Follow all redirect",
+                                        "required": true
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 17,
+                            "module": "builtin:BasicRouter",
+                            "version": 1,
+                            "mapper": null,
+                            "metadata": {
+                                "designer": {
+                                    "x": 2700,
+                                    "y": 300
+                                }
+                            },
+                            "routes": [
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 16,
+                                            "module": "airtable:ActionUpdateRecords",
+                                            "version": 3,
+                                            "parameters": {
+                                                "__IMTCONN__": 589530
+                                            },
+                                            "filter": {
+                                                "name": "success",
+                                                "conditions": [
+                                                    [
+                                                        {
+                                                            "a": "{{10.statusCode}}",
+                                                            "b": "200",
+                                                            "o": "text:equal"
+                                                        },
+                                                        {
+                                                            "a": "{{10.data.id}}",
+                                                            "b": "",
+                                                            "o": "exist"
+                                                        }
+                                                    ]
+                                                ]
+                                            },
+                                            "mapper": {
+                                                "id": "{{4.id}}",
+                                                "base": "appQD8vyOEbpbsJR9",
+                                                "table": "SKUs",
+                                                "record": {
+                                                    "fldAeXolSnyeuhu4m": "{{10.data.id}}",
+                                                    "fldSFCVpEQabgZ5pV": "{{now}}",
+                                                    "fldrbEhPVHi6LcRkL": {},
+                                                    "fldz77IrG0XXGWJps": "{{4.`Nolk SKU`}}"
+                                                },
+                                                "typecast": false,
+                                                "useColumnId": false
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 3000,
+                                                    "y": 150,
+                                                    "name": "PIM - Update Vendor SKU"
+                                                },
+                                                "restore": {
+                                                    "base": {
+                                                        "label": "Nolk PIM V2"
+                                                    },
+                                                    "table": {
+                                                        "label": "SKUs"
+                                                    },
+                                                    "record": {
+                                                        "nested": {
+                                                            "fld2CgCoUbt0sL9Po": {
+                                                                "mode": "chose",
+                                                                "items": []
+                                                            },
+                                                            "fld81lqSJsFKTjFAm": {
+                                                                "mode": "chose",
+                                                                "items": []
+                                                            },
+                                                            "fldDqPESFKQbYEeee": {
+                                                                "mode": "chose",
+                                                                "items": []
+                                                            },
+                                                            "fldDxHcq2RNVA9jvo": {
+                                                                "mode": "chose",
+                                                                "items": []
+                                                            },
+                                                            "fldIMl2RhV7dNJhax": {
+                                                                "mode": "chose",
+                                                                "items": []
+                                                            },
+                                                            "fldIbqfzc5IIZcY8w": {
+                                                                "mode": "chose",
+                                                                "items": []
+                                                            },
+                                                            "fldL6K5AJQeIneaAv": {
+                                                                "mode": "chose",
+                                                                "items": []
+                                                            },
+                                                            "fldN1P1bjnuUISyBF": {
+                                                                "mode": "chose",
+                                                                "items": []
+                                                            },
+                                                            "fldRFMoSw3YiNeV0b": {
+                                                                "mode": "chose",
+                                                                "items": []
+                                                            },
+                                                            "flddIODjJullfqNrN": {
+                                                                "mode": "chose",
+                                                                "items": []
+                                                            },
+                                                            "fldhDKAlQByzwmsSI": {
+                                                                "mode": "chose",
+                                                                "items": []
+                                                            },
+                                                            "fldiRLVsqcaUdBjn6": {
+                                                                "mode": "chose",
+                                                                "items": []
+                                                            },
+                                                            "flduoGZUdw4RUpCim": {
+                                                                "mode": "chose",
+                                                                "items": []
+                                                            },
+                                                            "fldwDdESPPzxVun1L": {
+                                                                "mode": "chose",
+                                                                "items": []
+                                                            },
+                                                            "fldxAa1TAiZhvdyIn": {
+                                                                "mode": "chose",
+                                                                "items": []
+                                                            }
+                                                        }
+                                                    },
+                                                    "typecast": {
+                                                        "mode": "chose"
+                                                    },
+                                                    "__IMTCONN__": {
+                                                        "label": "Nolk OS Airtable"
+                                                    },
+                                                    "useColumnId": {
+                                                        "mode": "chose"
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "__IMTCONN__",
+                                                        "type": "account",
+                                                        "label": "Connection",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "base",
+                                                        "type": "select",
+                                                        "label": "Base",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "typecast",
+                                                        "type": "boolean",
+                                                        "label": "Smart links",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "useColumnId",
+                                                        "type": "boolean",
+                                                        "label": "Use Column ID",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "table",
+                                                        "type": "select",
+                                                        "label": "Table",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "id",
+                                                        "type": "text",
+                                                        "label": "Record ID",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "record",
+                                                        "spec": [
+                                                            {
+                                                                "name": "fldrbEhPVHi6LcRkL",
+                                                                "spec": [
+                                                                    {
+                                                                        "name": "id",
+                                                                        "type": "text",
+                                                                        "label": "ID"
+                                                                    },
+                                                                    {
+                                                                        "name": "email",
+                                                                        "type": "text",
+                                                                        "label": "Email"
+                                                                    },
+                                                                    {
+                                                                        "name": "name",
+                                                                        "type": "text",
+                                                                        "label": "Name"
+                                                                    }
+                                                                ],
+                                                                "type": "collection",
+                                                                "label": "Last Modified By"
+                                                            },
+                                                            {
+                                                                "name": "fldZwwiN4H2ENI6Wf",
+                                                                "type": "text",
+                                                                "label": "Status"
+                                                            },
+                                                            {
+                                                                "name": "fldQZG7psRfTeFf1s",
+                                                                "type": "text",
+                                                                "label": "Marketing Name"
+                                                            },
+                                                            {
+                                                                "name": "flddIODjJullfqNrN",
+                                                                "spec": {
+                                                                    "label": "Record ID"
+                                                                },
+                                                                "type": "array",
+                                                                "label": "Brand"
+                                                            },
+                                                            {
+                                                                "name": "fldDqPESFKQbYEeee",
+                                                                "spec": {
+                                                                    "label": "Record ID"
+                                                                },
+                                                                "type": "array",
+                                                                "label": "Product Type"
+                                                            },
+                                                            {
+                                                                "name": "fldIbqfzc5IIZcY8w",
+                                                                "spec": {
+                                                                    "label": "Record ID"
+                                                                },
+                                                                "type": "array",
+                                                                "label": "Model (m)"
+                                                            },
+                                                            {
+                                                                "name": "fldIMl2RhV7dNJhax",
+                                                                "spec": {
+                                                                    "label": "Record ID"
+                                                                },
+                                                                "type": "array",
+                                                                "label": "Variant (v)"
+                                                            },
+                                                            {
+                                                                "name": "fldL6K5AJQeIneaAv",
+                                                                "spec": {
+                                                                    "label": "Record ID"
+                                                                },
+                                                                "type": "array",
+                                                                "label": "Color (c)"
+                                                            },
+                                                            {
+                                                                "name": "fldiRLVsqcaUdBjn6",
+                                                                "spec": {
+                                                                    "label": "Record ID"
+                                                                },
+                                                                "type": "array",
+                                                                "label": "Size (s)"
+                                                            },
+                                                            {
+                                                                "name": "flduoGZUdw4RUpCim",
+                                                                "spec": {
+                                                                    "label": "Record ID"
+                                                                },
+                                                                "type": "array",
+                                                                "label": "Labels"
+                                                            },
+                                                            {
+                                                                "name": "fld5YQqZjoRCvR4lL",
+                                                                "type": "text",
+                                                                "label": "UPC"
+                                                            },
+                                                            {
+                                                                "name": "fldDxHcq2RNVA9jvo",
+                                                                "spec": {
+                                                                    "label": "Record ID"
+                                                                },
+                                                                "type": "array",
+                                                                "label": "Vendor"
+                                                            },
+                                                            {
+                                                                "name": "fldke8H7hc4qBx3eG",
+                                                                "type": "text",
+                                                                "label": "Master SKU"
+                                                            },
+                                                            {
+                                                                "name": "fldCXvHkPk3sSaIzr",
+                                                                "time": true,
+                                                                "type": "date",
+                                                                "label": "Master SKU - Synced Date"
+                                                            },
+                                                            {
+                                                                "name": "fldwDdESPPzxVun1L",
+                                                                "spec": {
+                                                                    "label": "Record ID"
+                                                                },
+                                                                "type": "array",
+                                                                "label": "Version (x)"
+                                                            },
+                                                            {
+                                                                "name": "fldxAa1TAiZhvdyIn",
+                                                                "spec": {
+                                                                    "label": "Record ID"
+                                                                },
+                                                                "type": "array",
+                                                                "label": "Bundled Product 1"
+                                                            },
+                                                            {
+                                                                "name": "fldtWyb1HbwT35sKX",
+                                                                "type": "number",
+                                                                "label": "Quantity 1"
+                                                            },
+                                                            {
+                                                                "name": "fld81lqSJsFKTjFAm",
+                                                                "spec": {
+                                                                    "label": "Record ID"
+                                                                },
+                                                                "type": "array",
+                                                                "label": "Bundled Product 2"
+                                                            },
+                                                            {
+                                                                "name": "fldAp2crFFT5ywHTc",
+                                                                "type": "number",
+                                                                "label": "Quantity 2"
+                                                            },
+                                                            {
+                                                                "name": "fld2CgCoUbt0sL9Po",
+                                                                "spec": {
+                                                                    "label": "Record ID"
+                                                                },
+                                                                "type": "array",
+                                                                "label": "Bundled Product 3"
+                                                            },
+                                                            {
+                                                                "name": "fldk2IBy6zyLNMMii",
+                                                                "type": "number",
+                                                                "label": "Quantity 3"
+                                                            },
+                                                            {
+                                                                "name": "fldRFMoSw3YiNeV0b",
+                                                                "spec": {
+                                                                    "label": "Record ID"
+                                                                },
+                                                                "type": "array",
+                                                                "label": "Bundled Product 4"
+                                                            },
+                                                            {
+                                                                "name": "fld3g6z4NUT3bzOWR",
+                                                                "type": "number",
+                                                                "label": "Quantity 4"
+                                                            },
+                                                            {
+                                                                "name": "fldhDKAlQByzwmsSI",
+                                                                "spec": {
+                                                                    "label": "Record ID"
+                                                                },
+                                                                "type": "array",
+                                                                "label": "Bundled Product 5"
+                                                            },
+                                                            {
+                                                                "name": "fldYKY0JqGGyJA1uY",
+                                                                "type": "number",
+                                                                "label": "Quantity 5"
+                                                            },
+                                                            {
+                                                                "name": "fldCVbo3TYXuFkGhB",
+                                                                "time": true,
+                                                                "type": "date",
+                                                                "label": "Last Modified"
+                                                            },
+                                                            {
+                                                                "name": "fldEB2e5pqF59WQu5",
+                                                                "time": true,
+                                                                "type": "date",
+                                                                "label": "Created"
+                                                            },
+                                                            {
+                                                                "name": "fldZwPDHceXUWoTSy",
+                                                                "type": "text",
+                                                                "label": "Skubana - Product Id"
+                                                            },
+                                                            {
+                                                                "name": "fldXyITJLCeNROjYS",
+                                                                "type": "number",
+                                                                "label": "Weight"
+                                                            },
+                                                            {
+                                                                "name": "fldW3rOA3gHO1fmB6",
+                                                                "type": "text",
+                                                                "label": "Weight Unit"
+                                                            },
+                                                            {
+                                                                "name": "fldgcGwFtoudn86em",
+                                                                "type": "text",
+                                                                "label": "Description",
+                                                                "multiline": true
+                                                            },
+                                                            {
+                                                                "name": "fldvGmweQvWNKwd8m",
+                                                                "type": "text",
+                                                                "label": "Master SKUs from OMS's"
+                                                            },
+                                                            {
+                                                                "name": "fldVGKlWfBduDu660",
+                                                                "type": "text",
+                                                                "label": "Listings"
+                                                            },
+                                                            {
+                                                                "name": "fldN1P1bjnuUISyBF",
+                                                                "spec": {
+                                                                    "label": "Record ID"
+                                                                },
+                                                                "type": "array",
+                                                                "label": "Listings 2"
+                                                            },
+                                                            {
+                                                                "name": "fldAeXolSnyeuhu4m",
+                                                                "type": "number",
+                                                                "label": "Default Vendor SKU - Skubana Id"
+                                                            },
+                                                            {
+                                                                "name": "fldSFCVpEQabgZ5pV",
+                                                                "time": true,
+                                                                "type": "date",
+                                                                "label": "Default Vendor SKU - Synced Date"
+                                                            },
+                                                            {
+                                                                "name": "fldz77IrG0XXGWJps",
+                                                                "type": "text",
+                                                                "label": "Default Vendor SKU"
+                                                            }
+                                                        ],
+                                                        "type": "collection",
+                                                        "label": "Record"
+                                                    }
+                                                ],
+                                                "interface": [
+                                                    {
+                                                        "name": "id",
+                                                        "type": "text",
+                                                        "label": "ID"
+                                                    },
+                                                    {
+                                                        "name": "createdTime",
+                                                        "type": "date",
+                                                        "label": "Created Time"
+                                                    },
+                                                    {
+                                                        "name": "Nolk SKU",
+                                                        "type": "text",
+                                                        "label": "Nolk SKU"
+                                                    },
+                                                    {
+                                                        "name": "Status",
+                                                        "type": "text",
+                                                        "label": "Status"
+                                                    },
+                                                    {
+                                                        "name": "Sync Master SKU",
+                                                        "spec": [
+                                                            {
+                                                                "name": "label",
+                                                                "type": "text",
+                                                                "label": "Label"
+                                                            },
+                                                            {
+                                                                "name": "url",
+                                                                "type": "url",
+                                                                "label": "URL"
+                                                            }
+                                                        ],
+                                                        "type": "collection",
+                                                        "label": "Sync Master SKU"
+                                                    },
+                                                    {
+                                                        "name": "Marketing Name",
+                                                        "type": "text",
+                                                        "label": "Marketing Name"
+                                                    },
+                                                    {
+                                                        "name": "Brand",
+                                                        "spec": {
+                                                            "label": "Record ID"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Brand"
+                                                    },
+                                                    {
+                                                        "name": "Product Type",
+                                                        "spec": {
+                                                            "label": "Record ID"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Product Type"
+                                                    },
+                                                    {
+                                                        "name": "Model (m)",
+                                                        "spec": {
+                                                            "label": "Record ID"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Model (m)"
+                                                    },
+                                                    {
+                                                        "name": "Variant (v)",
+                                                        "spec": {
+                                                            "label": "Record ID"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Variant (v)"
+                                                    },
+                                                    {
+                                                        "name": "Color (c)",
+                                                        "spec": {
+                                                            "label": "Record ID"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Color (c)"
+                                                    },
+                                                    {
+                                                        "name": "Size (s)",
+                                                        "spec": {
+                                                            "label": "Record ID"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Size (s)"
+                                                    },
+                                                    {
+                                                        "name": "Labels",
+                                                        "spec": {
+                                                            "label": "Record ID"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Labels"
+                                                    },
+                                                    {
+                                                        "name": "UPC",
+                                                        "type": "text",
+                                                        "label": "UPC"
+                                                    },
+                                                    {
+                                                        "name": "Vendor",
+                                                        "spec": {
+                                                            "label": "Record ID"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Vendor"
+                                                    },
+                                                    {
+                                                        "name": "Master SKU",
+                                                        "type": "text",
+                                                        "label": "Master SKU"
+                                                    },
+                                                    {
+                                                        "name": "Master SKU - Sync Status",
+                                                        "type": "text",
+                                                        "label": "Master SKU - Sync Status"
+                                                    },
+                                                    {
+                                                        "name": "Master SKU - Synced Date",
+                                                        "time": true,
+                                                        "type": "date",
+                                                        "label": "Master SKU - Synced Date"
+                                                    },
+                                                    {
+                                                        "name": "Nolk Name",
+                                                        "type": "text",
+                                                        "label": "Nolk Name"
+                                                    },
+                                                    {
+                                                        "name": "Version (x)",
+                                                        "spec": {
+                                                            "label": "Record ID"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Version (x)"
+                                                    },
+                                                    {
+                                                        "name": "Bundled Product 1",
+                                                        "spec": {
+                                                            "label": "Record ID"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Bundled Product 1"
+                                                    },
+                                                    {
+                                                        "name": "Quantity 1",
+                                                        "type": "number",
+                                                        "label": "Quantity 1"
+                                                    },
+                                                    {
+                                                        "name": "Bundled Product 2",
+                                                        "spec": {
+                                                            "label": "Record ID"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Bundled Product 2"
+                                                    },
+                                                    {
+                                                        "name": "Quantity 2",
+                                                        "type": "number",
+                                                        "label": "Quantity 2"
+                                                    },
+                                                    {
+                                                        "name": "Bundled Product 3",
+                                                        "spec": {
+                                                            "label": "Record ID"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Bundled Product 3"
+                                                    },
+                                                    {
+                                                        "name": "Quantity 3",
+                                                        "type": "number",
+                                                        "label": "Quantity 3"
+                                                    },
+                                                    {
+                                                        "name": "Bundled Product 4",
+                                                        "spec": {
+                                                            "label": "Record ID"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Bundled Product 4"
+                                                    },
+                                                    {
+                                                        "name": "Quantity 4",
+                                                        "type": "number",
+                                                        "label": "Quantity 4"
+                                                    },
+                                                    {
+                                                        "name": "Bundled Product 5",
+                                                        "spec": {
+                                                            "label": "Record ID"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Bundled Product 5"
+                                                    },
+                                                    {
+                                                        "name": "Quantity 5",
+                                                        "type": "number",
+                                                        "label": "Quantity 5"
+                                                    },
+                                                    {
+                                                        "name": "Last Modified",
+                                                        "time": true,
+                                                        "type": "date",
+                                                        "label": "Last Modified"
+                                                    },
+                                                    {
+                                                        "name": "Created",
+                                                        "time": true,
+                                                        "type": "date",
+                                                        "label": "Created"
+                                                    },
+                                                    {
+                                                        "name": "Default Name",
+                                                        "type": "text",
+                                                        "label": "Default Name"
+                                                    },
+                                                    {
+                                                        "name": "SKU Type",
+                                                        "type": "text",
+                                                        "label": "SKU Type"
+                                                    },
+                                                    {
+                                                        "name": "Standardized SKU",
+                                                        "type": "text",
+                                                        "label": "Standardized SKU"
+                                                    },
+                                                    {
+                                                        "name": "Skubana - Product Id",
+                                                        "type": "text",
+                                                        "label": "Skubana - Product Id"
+                                                    },
+                                                    {
+                                                        "name": "Weight",
+                                                        "type": "number",
+                                                        "label": "Weight"
+                                                    },
+                                                    {
+                                                        "name": "Weight Unit",
+                                                        "type": "text",
+                                                        "label": "Weight Unit"
+                                                    },
+                                                    {
+                                                        "name": "Weight (grams)",
+                                                        "type": "text",
+                                                        "label": "Weight (grams)"
+                                                    },
+                                                    {
+                                                        "name": "Default Vendor SKU - Status",
+                                                        "type": "text",
+                                                        "label": "Default Vendor SKU - Status"
+                                                    },
+                                                    {
+                                                        "name": "Create Default Vendor SKU",
+                                                        "spec": [
+                                                            {
+                                                                "name": "label",
+                                                                "type": "text",
+                                                                "label": "Label"
+                                                            },
+                                                            {
+                                                                "name": "url",
+                                                                "type": "url",
+                                                                "label": "URL"
+                                                            }
+                                                        ],
+                                                        "type": "collection",
+                                                        "label": "Create Default Vendor SKU"
+                                                    },
+                                                    {
+                                                        "name": "Description",
+                                                        "type": "text",
+                                                        "label": "Description",
+                                                        "multiline": true
+                                                    },
+                                                    {
+                                                        "name": "Abbreviation (from Brand)",
+                                                        "type": "array",
+                                                        "label": "Abbreviation (from Brand)"
+                                                    },
+                                                    {
+                                                        "name": "Abbreviation (from Product Type)",
+                                                        "type": "array",
+                                                        "label": "Abbreviation (from Product Type)"
+                                                    },
+                                                    {
+                                                        "name": "Abbreviation (from Model (m))",
+                                                        "type": "array",
+                                                        "label": "Abbreviation (from Model (m))"
+                                                    },
+                                                    {
+                                                        "name": "Abbreviation (from Variant (v))",
+                                                        "type": "array",
+                                                        "label": "Abbreviation (from Variant (v))"
+                                                    },
+                                                    {
+                                                        "name": "Abbreviation (from Size (s))",
+                                                        "type": "array",
+                                                        "label": "Abbreviation (from Size (s))"
+                                                    },
+                                                    {
+                                                        "name": "Abbreviation (from Color (c))",
+                                                        "type": "array",
+                                                        "label": "Abbreviation (from Color (c))"
+                                                    },
+                                                    {
+                                                        "name": "Abbreviation (from Version (x))",
+                                                        "type": "array",
+                                                        "label": "Abbreviation (from Version (x))"
+                                                    },
+                                                    {
+                                                        "name": "Master SKUs from OMS's",
+                                                        "type": "text",
+                                                        "label": "Master SKUs from OMS's"
+                                                    },
+                                                    {
+                                                        "name": "Change?",
+                                                        "type": "text",
+                                                        "label": "Change?"
+                                                    },
+                                                    {
+                                                        "name": "Name (from Brand)",
+                                                        "type": "array",
+                                                        "label": "Name (from Brand)"
+                                                    },
+                                                    {
+                                                        "name": "Value (from Product Type)",
+                                                        "type": "array",
+                                                        "label": "Value (from Product Type)"
+                                                    },
+                                                    {
+                                                        "name": "Value (from Model (m))",
+                                                        "type": "array",
+                                                        "label": "Value (from Model (m))"
+                                                    },
+                                                    {
+                                                        "name": "Value (from Variant (v))",
+                                                        "type": "array",
+                                                        "label": "Value (from Variant (v))"
+                                                    },
+                                                    {
+                                                        "name": "Value (from Size (s))",
+                                                        "type": "array",
+                                                        "label": "Value (from Size (s))"
+                                                    },
+                                                    {
+                                                        "name": "Value (from Color (c))",
+                                                        "type": "array",
+                                                        "label": "Value (from Color (c))"
+                                                    },
+                                                    {
+                                                        "name": "Value (from Version (x))",
+                                                        "type": "array",
+                                                        "label": "Value (from Version (x))"
+                                                    },
+                                                    {
+                                                        "name": "Value (from Labels)",
+                                                        "type": "array",
+                                                        "label": "Value (from Labels)"
+                                                    },
+                                                    {
+                                                        "name": "Nolk SKU (from Bundled Product 1)",
+                                                        "type": "array",
+                                                        "label": "Nolk SKU (from Bundled Product 1)"
+                                                    },
+                                                    {
+                                                        "name": "Nolk SKU (from Bundled Product 2)",
+                                                        "type": "array",
+                                                        "label": "Nolk SKU (from Bundled Product 2)"
+                                                    },
+                                                    {
+                                                        "name": "Nolk SKU (from Bundled Product 3)",
+                                                        "type": "array",
+                                                        "label": "Nolk SKU (from Bundled Product 3)"
+                                                    },
+                                                    {
+                                                        "name": "Nolk SKU (from Bundled Product 4)",
+                                                        "type": "array",
+                                                        "label": "Nolk SKU (from Bundled Product 4)"
+                                                    },
+                                                    {
+                                                        "name": "Nolk SKU (from Bundled Product 5)",
+                                                        "type": "array",
+                                                        "label": "Nolk SKU (from Bundled Product 5)"
+                                                    },
+                                                    {
+                                                        "name": "Skubana - Product Id (from Bundled Product 1)",
+                                                        "type": "array",
+                                                        "label": "Skubana - Product Id (from Bundled Product 1)"
+                                                    },
+                                                    {
+                                                        "name": "Skubana - Product Id (from Bundled Product 2)",
+                                                        "type": "array",
+                                                        "label": "Skubana - Product Id (from Bundled Product 2)"
+                                                    },
+                                                    {
+                                                        "name": "Skubana - Product Id (from Bundled Product 3)",
+                                                        "type": "array",
+                                                        "label": "Skubana - Product Id (from Bundled Product 3)"
+                                                    },
+                                                    {
+                                                        "name": "Skubana - Product Id (from Bundled Product 4)",
+                                                        "type": "array",
+                                                        "label": "Skubana - Product Id (from Bundled Product 4)"
+                                                    },
+                                                    {
+                                                        "name": "Skubana - Product Id (from Bundled Product 5)",
+                                                        "type": "array",
+                                                        "label": "Skubana - Product Id (from Bundled Product 5)"
+                                                    },
+                                                    {
+                                                        "name": "Listings",
+                                                        "type": "text",
+                                                        "label": "Listings"
+                                                    },
+                                                    {
+                                                        "name": "Listings 2",
+                                                        "spec": {
+                                                            "label": "Record ID"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Listings 2"
+                                                    },
+                                                    {
+                                                        "name": "Created By",
+                                                        "type": "text",
+                                                        "label": "Created By"
+                                                    },
+                                                    {
+                                                        "name": "Last Modified By",
+                                                        "spec": [
+                                                            {
+                                                                "name": "id",
+                                                                "type": "text",
+                                                                "label": "ID"
+                                                            },
+                                                            {
+                                                                "name": "email",
+                                                                "type": "text",
+                                                                "label": "Email"
+                                                            },
+                                                            {
+                                                                "name": "name",
+                                                                "type": "text",
+                                                                "label": "Name"
+                                                            }
+                                                        ],
+                                                        "type": "collection",
+                                                        "label": "Last Modified By"
+                                                    },
+                                                    {
+                                                        "name": "Default Vendor SKU - Skubana Id",
+                                                        "type": "number",
+                                                        "label": "Default Vendor SKU - Skubana Id"
+                                                    },
+                                                    {
+                                                        "name": "Default Vendor SKU - Synced Date",
+                                                        "time": true,
+                                                        "type": "date",
+                                                        "label": "Default Vendor SKU - Synced Date"
+                                                    },
+                                                    {
+                                                        "name": "Default Vendor SKU",
+                                                        "type": "text",
+                                                        "label": "Default Vendor SKU"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 20,
+                                            "module": "google-email:ActionSendEmail",
+                                            "version": 2,
+                                            "parameters": {
+                                                "account": 589529
+                                            },
+                                            "filter": {
+                                                "name": "",
+                                                "conditions": [
+                                                    [
+                                                        {
+                                                            "a": "{{10.statusCode}}",
+                                                            "b": "200",
+                                                            "o": "text:notequal"
+                                                        }
+                                                    ]
+                                                ]
+                                            },
+                                            "mapper": {
+                                                "cc": [],
+                                                "to": [
+                                                    "{{3.v_receipt_1}}"
+                                                ],
+                                                "bcc": [],
+                                                "from": "",
+                                                "html": "{{4.`Nolk SKU`}}",
+                                                "subject": "Failed - Create Default Vendor SKU",
+                                                "attachments": []
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 3000,
+                                                    "y": 450
+                                                },
+                                                "restore": {
+                                                    "cc": {
+                                                        "mode": "chose",
+                                                        "items": []
+                                                    },
+                                                    "to": {
+                                                        "mode": "chose",
+                                                        "items": [
+                                                            "undefined"
+                                                        ]
+                                                    },
+                                                    "bcc": {
+                                                        "mode": "chose",
+                                                        "items": []
+                                                    },
+                                                    "account": {
+                                                        "label": "My Google Restricted connection (gnguyen@nolk.com)"
+                                                    },
+                                                    "attachments": {
+                                                        "mode": "chose",
+                                                        "items": []
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "account",
+                                                        "type": "account",
+                                                        "label": "Connection",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "from",
+                                                        "type": "text",
+                                                        "label": "From"
+                                                    },
+                                                    {
+                                                        "name": "to",
+                                                        "spec": {
+                                                            "name": " ",
+                                                            "type": "email",
+                                                            "label": "Email address",
+                                                            "required": true
+                                                        },
+                                                        "type": "array",
+                                                        "label": "To",
+                                                        "labels": {
+                                                            "add": "Add a recipient",
+                                                            "edit": "Edit a recipient"
+                                                        },
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "subject",
+                                                        "type": "text",
+                                                        "label": "Subject"
+                                                    },
+                                                    {
+                                                        "name": "html",
+                                                        "type": "text",
+                                                        "label": "Content"
+                                                    },
+                                                    {
+                                                        "name": "attachments",
+                                                        "spec": [
+                                                            {
+                                                                "name": "fileName",
+                                                                "type": "filename",
+                                                                "label": "File name",
+                                                                "required": true,
+                                                                "semantic": "file:name"
+                                                            },
+                                                            {
+                                                                "name": "data",
+                                                                "type": "buffer",
+                                                                "label": "Data",
+                                                                "required": true,
+                                                                "semantic": "file:data"
+                                                            },
+                                                            {
+                                                                "name": "cid",
+                                                                "type": "text",
+                                                                "label": "Content-ID"
+                                                            }
+                                                        ],
+                                                        "type": "array",
+                                                        "label": "Attachments",
+                                                        "labels": {
+                                                            "add": "Add an attachment",
+                                                            "edit": "Edit an attachment"
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "cc",
+                                                        "spec": {
+                                                            "type": "email",
+                                                            "label": "Email address"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Copy recipient",
+                                                        "labels": {
+                                                            "add": "Add a copy recipient",
+                                                            "edit": "Edit a copy recipient"
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "bcc",
+                                                        "spec": {
+                                                            "type": "email",
+                                                            "label": "Email address"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Blind copy recipient",
+                                                        "labels": {
+                                                            "add": "Add a blind copy recipient",
+                                                            "edit": "Edit a blind copy recipient"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "instant": true,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": false,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": [],
+            "notes": [
+                {
+                    "id": 3,
+                    "text": "",
+                    "filter": false
+                }
+            ]
+        },
+        "zone": "us1.make.com"
+    }
+}

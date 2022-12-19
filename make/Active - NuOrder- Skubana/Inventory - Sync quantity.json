@@ -1,0 +1,1662 @@
+{
+    "name": "Inventory - Sync quantity",
+    "flow": [
+        {
+            "id": 67,
+            "module": "util:SetVariables",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "scope": "roundtrip",
+                "variables": [
+                    {
+                        "name": "v_skubana_api_domain",
+                        "value": "https://api.skubana.com"
+                    },
+                    {
+                        "name": "v_skubana_access_token",
+                        "value": "ab0e575e-113f-46f5-9c15-c86f019e56c2"
+                    },
+                    {
+                        "name": "v_skubana_nuoder_sales_channel_id",
+                        "value": "16879"
+                    },
+                    {
+                        "name": "v_receipt_1",
+                        "value": "gnguyen@nolk.com"
+                    },
+                    {
+                        "name": "v_receipt_2",
+                        "value": "os@nolk.com"
+                    }
+                ]
+            },
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 300,
+                    "name": "Setup Variables"
+                },
+                "restore": {
+                    "scope": {
+                        "label": "One cycle"
+                    },
+                    "variables": {
+                        "items": [
+                            "undefined",
+                            "undefined",
+                            "undefined",
+                            "undefined",
+                            "undefined"
+                        ]
+                    }
+                },
+                "expect": [
+                    {
+                        "name": "variables",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Variable name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "any",
+                                "label": "Variable value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Variables"
+                    },
+                    {
+                        "name": "scope",
+                        "type": "select",
+                        "label": "Variable lifetime",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "roundtrip",
+                                "execution"
+                            ]
+                        }
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "v_skubana_api_domain",
+                        "type": "any",
+                        "label": "v_skubana_api_domain"
+                    },
+                    {
+                        "name": "v_skubana_access_token",
+                        "type": "any",
+                        "label": "v_skubana_access_token"
+                    },
+                    {
+                        "name": "v_skubana_nuoder_sales_channel_id",
+                        "type": "any",
+                        "label": "v_skubana_nuoder_sales_channel_id"
+                    },
+                    {
+                        "name": "v_receipt_1",
+                        "type": "any",
+                        "label": "v_receipt_1"
+                    },
+                    {
+                        "name": "v_receipt_2",
+                        "type": "any",
+                        "label": "v_receipt_2"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 70,
+            "module": "util:GetVariables",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "variables": [
+                    "{{67.v_skubana_api_domain}}",
+                    "{{67.v_skubana_access_token}}",
+                    "{{67.v_skubana_nuoder_sales_channel_id}}",
+                    "{{67.v_receipt_1}}",
+                    "{{67.v_receipt_2}}"
+                ]
+            },
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 300,
+                    "name": "Get Variables"
+                },
+                "restore": {
+                    "variables": {
+                        "items": [
+                            "undefined",
+                            "undefined",
+                            "undefined",
+                            "undefined",
+                            "undefined"
+                        ]
+                    }
+                },
+                "expect": [
+                    {
+                        "name": "variables",
+                        "spec": {
+                            "name": "name",
+                            "type": "text",
+                            "label": "Variable name",
+                            "required": true
+                        },
+                        "type": "array",
+                        "label": "Variables"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": null,
+                        "type": "any",
+                        "label": null
+                    }
+                ]
+            }
+        },
+        {
+            "id": 69,
+            "module": "amazon-lambda:invokeAFunction",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 589534
+            },
+            "mapper": {
+                "body": "{\n  \"url\": \"/api/products/modified/after/1/1/2021\",\n  \"method\": \"GET\"\n}",
+                "function": "nuorder_wrapper_api",
+                "InvocationType": "RequestResponse"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 600,
+                    "y": 300,
+                    "name": "NuOder - Get all products"
+                },
+                "restore": {
+                    "function": {
+                        "mode": "chose",
+                        "label": "nuorder_wrapper_api ($LATEST)"
+                    },
+                    "__IMTCONN__": {
+                        "label": "My Amazon Lambda connection"
+                    },
+                    "InvocationType": {
+                        "mode": "chose",
+                        "label": "Request Response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "function",
+                        "type": "select",
+                        "label": "Function Name",
+                        "required": true
+                    },
+                    {
+                        "name": "InvocationType",
+                        "type": "select",
+                        "label": "Invocation Type",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "RequestResponse",
+                                "Event",
+                                "DryRun"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "body",
+                        "type": "any",
+                        "label": "Body"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 4,
+            "module": "json:TransformToJSON",
+            "version": 1,
+            "parameters": {
+                "space": ""
+            },
+            "mapper": {
+                "object": "{{69.body}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 900,
+                    "y": 300,
+                    "name": "NuOder - Products"
+                },
+                "restore": {
+                    "space": {
+                        "label": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "space",
+                        "type": "select",
+                        "label": "Indentation",
+                        "validate": {
+                            "enum": [
+                                "tab",
+                                "2",
+                                "4"
+                            ]
+                        }
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "object",
+                        "type": "any",
+                        "label": "Object"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 5,
+            "module": "json:ParseJSON",
+            "version": 1,
+            "parameters": {
+                "type": 36650
+            },
+            "mapper": {
+                "json": "{{4.json}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1200,
+                    "y": 300,
+                    "name": "NuOder - Products Parsed"
+                },
+                "restore": {
+                    "type": {
+                        "label": "nuorder_products"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "type",
+                        "type": "udt",
+                        "label": "Data structure"
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "json",
+                        "type": "text",
+                        "label": "JSON string",
+                        "required": true
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "_id",
+                        "type": "text"
+                    },
+                    {
+                        "name": "active",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "archived",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "cancelled",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "images",
+                        "type": "array"
+                    },
+                    {
+                        "name": "available_now",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "size_groups",
+                        "type": "array"
+                    },
+                    {
+                        "name": "banners",
+                        "type": "array"
+                    },
+                    {
+                        "name": "__original_composite_keys",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "__inventory",
+                        "spec": {
+                            "type": "text"
+                        },
+                        "type": "array"
+                    },
+                    {
+                        "name": "__tracks_inventory",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "__warehouses",
+                        "type": "array"
+                    },
+                    {
+                        "name": "__sold_out",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "__merchandising_order",
+                        "type": "number"
+                    },
+                    {
+                        "name": "__pack_ids",
+                        "type": "array"
+                    },
+                    {
+                        "name": "seasons",
+                        "type": "array"
+                    },
+                    {
+                        "name": "schema_id",
+                        "type": "text"
+                    },
+                    {
+                        "name": "sizes",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "size",
+                                    "type": "text"
+                                },
+                                {
+                                    "name": "upc",
+                                    "type": "text"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array"
+                    },
+                    {
+                        "name": "pricing",
+                        "spec": [
+                            {
+                                "name": "USD",
+                                "spec": [
+                                    {
+                                        "name": "wholesale",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "retail",
+                                        "type": "number"
+                                    }
+                                ],
+                                "type": "collection"
+                            }
+                        ],
+                        "type": "collection"
+                    },
+                    {
+                        "name": "name",
+                        "type": "text"
+                    },
+                    {
+                        "name": "style_number",
+                        "type": "text"
+                    },
+                    {
+                        "name": "season",
+                        "type": "text"
+                    },
+                    {
+                        "name": "color",
+                        "type": "text"
+                    },
+                    {
+                        "name": "color_code",
+                        "type": "text"
+                    },
+                    {
+                        "name": "category",
+                        "type": "text"
+                    },
+                    {
+                        "name": "subcategory",
+                        "type": "text"
+                    },
+                    {
+                        "name": "description",
+                        "type": "text"
+                    },
+                    {
+                        "name": "brand_id",
+                        "type": "text"
+                    },
+                    {
+                        "name": "__pending_initial_pricing",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "__brand_name",
+                        "type": "text"
+                    },
+                    {
+                        "name": "__size_ids",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "_id",
+                                    "type": "text"
+                                },
+                                {
+                                    "name": "size",
+                                    "type": "text"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array"
+                    },
+                    {
+                        "name": "created_on",
+                        "type": "date"
+                    },
+                    {
+                        "name": "__variant_colors",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "_id",
+                                    "type": "text"
+                                },
+                                {
+                                    "name": "color",
+                                    "type": "text"
+                                },
+                                {
+                                    "name": "ref",
+                                    "type": "text"
+                                },
+                                {
+                                    "name": "swatch",
+                                    "type": "text"
+                                },
+                                {
+                                    "name": "swatch_label",
+                                    "type": "text"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array"
+                    },
+                    {
+                        "name": "__variant_colors_inactive",
+                        "type": "array"
+                    },
+                    {
+                        "name": "__inventory_cache",
+                        "type": "array"
+                    },
+                    {
+                        "name": "__barcode",
+                        "type": "text"
+                    },
+                    {
+                        "name": "modified_on",
+                        "type": "date"
+                    },
+                    {
+                        "name": "__size_run",
+                        "type": "text"
+                    },
+                    {
+                        "name": "__size_range",
+                        "type": "text"
+                    },
+                    {
+                        "name": "unique_key",
+                        "type": "text"
+                    },
+                    {
+                        "name": "available_from",
+                        "type": "text"
+                    },
+                    {
+                        "name": "available_until",
+                        "type": "text"
+                    },
+                    {
+                        "name": "order_closing",
+                        "type": "text"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 6,
+            "module": "builtin:BasicFeeder",
+            "version": 1,
+            "parameters": {},
+            "filter": {
+                "name": "",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{5.archived}}",
+                            "b": "true",
+                            "o": "text:notequal"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "array": "{{5.brand_id}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1500,
+                    "y": 300,
+                    "name": "Brand ID"
+                },
+                "restore": {
+                    "array": {
+                        "mode": "edit"
+                    }
+                },
+                "expect": [
+                    {
+                        "mode": "edit",
+                        "name": "array",
+                        "spec": [],
+                        "type": "array",
+                        "label": "Array"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 45,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": 1800,
+                    "y": 300
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 17,
+                            "module": "amazon-lambda:invokeAFunction",
+                            "version": 1,
+                            "parameters": {
+                                "__IMTCONN__": 589541
+                            },
+                            "mapper": {
+                                "body": "{\n  \"url\": \"/api/inventory/external_id/{{6.value}}\",\n  \"method\": \"GET\"\n}",
+                                "function": "nuorder_wrapper_api",
+                                "InvocationType": "RequestResponse"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 2100,
+                                    "y": 150,
+                                    "name": "NuOrder - Get inventory"
+                                },
+                                "restore": {
+                                    "function": {
+                                        "mode": "chose",
+                                        "label": "nuorder_wrapper_api ($LATEST)"
+                                    },
+                                    "__IMTCONN__": {
+                                        "label": "My Amazon Lambda connection"
+                                    },
+                                    "InvocationType": {
+                                        "mode": "chose",
+                                        "label": "Request Response"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "function",
+                                        "type": "select",
+                                        "label": "Function Name",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "InvocationType",
+                                        "type": "select",
+                                        "label": "Invocation Type",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "RequestResponse",
+                                                "Event",
+                                                "DryRun"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "body",
+                                        "type": "any",
+                                        "label": "Body"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 18,
+                            "module": "json:TransformToJSON",
+                            "version": 1,
+                            "parameters": {
+                                "space": ""
+                            },
+                            "mapper": {
+                                "object": "{{17.body}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 2400,
+                                    "y": 150,
+                                    "name": "NuOder - Inventory"
+                                },
+                                "restore": {
+                                    "space": {
+                                        "label": ""
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "space",
+                                        "type": "select",
+                                        "label": "Indentation",
+                                        "validate": {
+                                            "enum": [
+                                                "tab",
+                                                "2",
+                                                "4"
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "object",
+                                        "type": "any",
+                                        "label": "Object"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 19,
+                            "module": "json:ParseJSON",
+                            "version": 1,
+                            "parameters": {
+                                "type": 36648
+                            },
+                            "mapper": {
+                                "json": "{{18.json}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 2700,
+                                    "y": 150,
+                                    "name": "NuOder - Inventory Parsed"
+                                },
+                                "restore": {
+                                    "type": {
+                                        "label": "nuorder_inventory"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "type",
+                                        "type": "udt",
+                                        "label": "Data structure"
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "json",
+                                        "type": "text",
+                                        "label": "JSON string",
+                                        "required": true
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "inventory",
+                                        "spec": {
+                                            "spec": [
+                                                {
+                                                    "name": "warehouse",
+                                                    "type": "text"
+                                                },
+                                                {
+                                                    "name": "prebook",
+                                                    "type": "boolean"
+                                                },
+                                                {
+                                                    "name": "wip",
+                                                    "spec": {
+                                                        "spec": [
+                                                            {
+                                                                "name": "name",
+                                                                "type": "text"
+                                                            },
+                                                            {
+                                                                "name": "sizes",
+                                                                "spec": {
+                                                                    "spec": [
+                                                                        {
+                                                                            "name": "size",
+                                                                            "type": "text"
+                                                                        },
+                                                                        {
+                                                                            "name": "quantity",
+                                                                            "type": "number"
+                                                                        }
+                                                                    ],
+                                                                    "type": "collection"
+                                                                },
+                                                                "type": "array"
+                                                            },
+                                                            {
+                                                                "name": "size",
+                                                                "spec": {
+                                                                    "spec": [
+                                                                        {
+                                                                            "name": "size",
+                                                                            "type": "text"
+                                                                        },
+                                                                        {
+                                                                            "name": "quantity",
+                                                                            "type": "number"
+                                                                        }
+                                                                    ],
+                                                                    "type": "collection"
+                                                                },
+                                                                "type": "array"
+                                                            }
+                                                        ],
+                                                        "type": "collection"
+                                                    },
+                                                    "type": "array"
+                                                }
+                                            ],
+                                            "type": "collection"
+                                        },
+                                        "type": "array"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 43,
+                            "module": "builtin:BasicRouter",
+                            "version": 1,
+                            "mapper": null,
+                            "metadata": {
+                                "designer": {
+                                    "x": 3000,
+                                    "y": 150
+                                }
+                            },
+                            "routes": [
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 42,
+                                            "module": "util:SetVariable2",
+                                            "version": 1,
+                                            "parameters": {},
+                                            "mapper": {
+                                                "name": "var_brand_id",
+                                                "scope": "roundtrip",
+                                                "value": "{{6.value}}"
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 3300,
+                                                    "y": 0,
+                                                    "name": "var_brand_id"
+                                                },
+                                                "restore": {
+                                                    "scope": {
+                                                        "label": "One cycle"
+                                                    }
+                                                },
+                                                "expect": [
+                                                    {
+                                                        "name": "name",
+                                                        "type": "text",
+                                                        "label": "Variable name",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "scope",
+                                                        "type": "select",
+                                                        "label": "Variable lifetime",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "enum": [
+                                                                "roundtrip",
+                                                                "execution"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "value",
+                                                        "type": "any",
+                                                        "label": "Variable value"
+                                                    }
+                                                ],
+                                                "interface": [
+                                                    {
+                                                        "name": "var_brand_id",
+                                                        "type": "any",
+                                                        "label": "var_brand_id"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 44,
+                                            "module": "util:SetVariable2",
+                                            "version": 1,
+                                            "parameters": {},
+                                            "mapper": {
+                                                "name": "var_prebook",
+                                                "scope": "roundtrip",
+                                                "value": "{{ifempty(19.inventory[].prebook; \"false\")}}"
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 3300,
+                                                    "y": 300,
+                                                    "name": "var_prebook"
+                                                },
+                                                "restore": {
+                                                    "scope": {
+                                                        "label": "One cycle"
+                                                    }
+                                                },
+                                                "expect": [
+                                                    {
+                                                        "name": "name",
+                                                        "type": "text",
+                                                        "label": "Variable name",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "scope",
+                                                        "type": "select",
+                                                        "label": "Variable lifetime",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "enum": [
+                                                                "roundtrip",
+                                                                "execution"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "value",
+                                                        "type": "any",
+                                                        "label": "Variable value"
+                                                    }
+                                                ],
+                                                "interface": [
+                                                    {
+                                                        "name": "var_prebook",
+                                                        "type": "any",
+                                                        "label": "var_prebook"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 29,
+                            "module": "builtin:BasicFeeder",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "array": "{{5.sizes}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 2100,
+                                    "y": 600
+                                },
+                                "restore": {
+                                    "array": {
+                                        "mode": "edit"
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "mode": "edit",
+                                        "name": "array",
+                                        "spec": [],
+                                        "type": "array",
+                                        "label": "Array"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 25,
+                            "module": "builtin:BasicFeeder",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "array": "{{29.upc}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 2400,
+                                    "y": 600,
+                                    "name": "UPC"
+                                },
+                                "restore": {
+                                    "array": {
+                                        "mode": "edit"
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "mode": "edit",
+                                        "name": "array",
+                                        "spec": [],
+                                        "type": "array",
+                                        "label": "Array"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 8,
+                            "module": "http:ActionSendData",
+                            "version": 3,
+                            "parameters": {
+                                "handleErrors": false,
+                                "useNewZLibDeCompress": "true"
+                            },
+                            "mapper": {
+                                "ca": "",
+                                "qs": [
+                                    {
+                                        "name": "sku",
+                                        "value": "{{25.value}}"
+                                    }
+                                ],
+                                "url": "{{67.v_skubana_api_domain}}/v1.1/productstocks/total",
+                                "gzip": true,
+                                "method": "get",
+                                "headers": [
+                                    {
+                                        "name": "Content-Type",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "name": "Authorization",
+                                        "value": "Bearer {{67.v_skubana_access_token}}"
+                                    }
+                                ],
+                                "timeout": "",
+                                "useMtls": false,
+                                "authPass": "",
+                                "authUser": "",
+                                "bodyType": "",
+                                "serializeUrl": false,
+                                "shareCookies": false,
+                                "parseResponse": true,
+                                "followRedirect": true,
+                                "useQuerystring": false,
+                                "followAllRedirects": false,
+                                "rejectUnauthorized": true
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 2700,
+                                    "y": 600,
+                                    "name": "Skubana - Get available quantity"
+                                },
+                                "restore": {
+                                    "qs": {
+                                        "mode": "chose",
+                                        "items": [
+                                            "undefined"
+                                        ]
+                                    },
+                                    "method": {
+                                        "mode": "chose",
+                                        "label": "GET"
+                                    },
+                                    "headers": {
+                                        "mode": "chose",
+                                        "items": [
+                                            "undefined",
+                                            "undefined"
+                                        ]
+                                    },
+                                    "bodyType": {
+                                        "label": ""
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "handleErrors",
+                                        "type": "boolean",
+                                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useNewZLibDeCompress",
+                                        "type": "hidden"
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "url",
+                                        "type": "url",
+                                        "label": "URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "serializeUrl",
+                                        "type": "boolean",
+                                        "label": "Serialize URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "method",
+                                        "type": "select",
+                                        "label": "Method",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "get",
+                                                "head",
+                                                "post",
+                                                "put",
+                                                "patch",
+                                                "delete",
+                                                "options"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Headers",
+                                        "labels": {
+                                            "add": "Add a header",
+                                            "edit": "Edit a header"
+                                        }
+                                    },
+                                    {
+                                        "name": "qs",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Query String",
+                                        "labels": {
+                                            "add": "Add parameter",
+                                            "edit": "Edit parameter"
+                                        }
+                                    },
+                                    {
+                                        "name": "bodyType",
+                                        "type": "select",
+                                        "label": "Body type",
+                                        "validate": {
+                                            "enum": [
+                                                "raw",
+                                                "x_www_form_urlencoded",
+                                                "multipart_form_data"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "parseResponse",
+                                        "type": "boolean",
+                                        "label": "Parse response",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "authUser",
+                                        "type": "text",
+                                        "label": "User name"
+                                    },
+                                    {
+                                        "name": "authPass",
+                                        "type": "password",
+                                        "label": "Password"
+                                    },
+                                    {
+                                        "name": "timeout",
+                                        "type": "uinteger",
+                                        "label": "Timeout",
+                                        "validate": {
+                                            "max": 300,
+                                            "min": 1
+                                        }
+                                    },
+                                    {
+                                        "name": "shareCookies",
+                                        "type": "boolean",
+                                        "label": "Share cookies with other HTTP modules",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "ca",
+                                        "type": "cert",
+                                        "label": "Self-signed certificate",
+                                        "multiline": true
+                                    },
+                                    {
+                                        "name": "rejectUnauthorized",
+                                        "type": "boolean",
+                                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "followRedirect",
+                                        "type": "boolean",
+                                        "label": "Follow redirect",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useQuerystring",
+                                        "type": "boolean",
+                                        "label": "Disable serialization of multiple same query string keys as arrays",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "gzip",
+                                        "type": "boolean",
+                                        "label": "Request compressed content",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useMtls",
+                                        "type": "boolean",
+                                        "label": "Use Mutual TLS",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "followAllRedirects",
+                                        "type": "boolean",
+                                        "label": "Follow all redirect",
+                                        "required": true
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 26,
+                            "module": "json:TransformToJSON",
+                            "version": 1,
+                            "parameters": {
+                                "space": ""
+                            },
+                            "mapper": {
+                                "object": "{{8.data}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 3000,
+                                    "y": 600
+                                },
+                                "restore": {
+                                    "space": {
+                                        "label": ""
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "space",
+                                        "type": "select",
+                                        "label": "Indentation",
+                                        "validate": {
+                                            "enum": [
+                                                "tab",
+                                                "2",
+                                                "4"
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "object",
+                                        "type": "any",
+                                        "label": "Object"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 27,
+                            "module": "json:ParseJSON",
+                            "version": 1,
+                            "parameters": {
+                                "type": 36652
+                            },
+                            "mapper": {
+                                "json": "{{26.json}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 3300,
+                                    "y": 600,
+                                    "name": "Skubana - Inventory JSON Parsed"
+                                },
+                                "restore": {
+                                    "type": {
+                                        "label": "inventory_product_total"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "type",
+                                        "type": "udt",
+                                        "label": "Data structure"
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "json",
+                                        "type": "text",
+                                        "label": "JSON string",
+                                        "required": true
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "allocatedQuantity",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "availableQuantity",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "inTransitQuantity",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "lockedQuantity",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "onHandQuantity",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "product",
+                                        "spec": [
+                                            {
+                                                "name": "description",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "fnSku",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "hazmat",
+                                                "type": "boolean"
+                                            },
+                                            {
+                                                "name": "masterSku",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "mpn",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "name",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "productId",
+                                                "type": "number"
+                                            },
+                                            {
+                                                "name": "productType",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "productWeight",
+                                                "type": "number"
+                                            },
+                                            {
+                                                "name": "upc",
+                                                "type": "text"
+                                            }
+                                        ],
+                                        "type": "collection"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 58,
+                            "module": "json:AggregateToJSON",
+                            "version": 1,
+                            "parameters": {
+                                "type": 36651,
+                                "space": "",
+                                "feeder": 6
+                            },
+                            "filter": {
+                                "name": "matched SKU",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{27.product.masterSku}}",
+                                            "b": "{{25.value}}",
+                                            "o": "text:equal"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "upc": "{{29.upc}}",
+                                "size": "{{29.size}}",
+                                "quantity": "{{ifempty(27.availableQuantity; 0)}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 3600,
+                                    "y": 600
+                                },
+                                "restore": {
+                                    "type": {
+                                        "label": "nuorder_inventory_product_size"
+                                    },
+                                    "space": {
+                                        "label": ""
+                                    },
+                                    "feeder": {
+                                        "label": "Brand ID [6]"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "type",
+                                        "type": "udt",
+                                        "label": "Data structure",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "space",
+                                        "type": "select",
+                                        "label": "Indentation",
+                                        "validate": {
+                                            "enum": [
+                                                "tab",
+                                                "2",
+                                                "4"
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "size",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "upc",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "quantity",
+                                        "type": "number"
+                                    }
+                                ],
+                                "advanced": true
+                            }
+                        },
+                        {
+                            "id": 56,
+                            "module": "util:GetVariable2",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "name": "var_brand_id"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 3900,
+                                    "y": 600
+                                },
+                                "expect": [
+                                    {
+                                        "name": "name",
+                                        "type": "text",
+                                        "label": "Variable name",
+                                        "required": true
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "var_brand_id",
+                                        "type": "any",
+                                        "label": "var_brand_id"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 57,
+                            "module": "util:GetVariable2",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "name": "var_prebook"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 4200,
+                                    "y": 600
+                                },
+                                "expect": [
+                                    {
+                                        "name": "name",
+                                        "type": "text",
+                                        "label": "Variable name",
+                                        "required": true
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "var_prebook",
+                                        "type": "any",
+                                        "label": "var_prebook"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 65,
+                            "module": "amazon-lambda:invokeAFunction",
+                            "version": 1,
+                            "parameters": {
+                                "__IMTCONN__": 589531
+                            },
+                            "filter": {
+                                "name": "",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{58.json}}",
+                                            "b": "[]",
+                                            "o": "text:notequal"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "body": "{\n    \"url\": \"/api/inventory/external_id/{{56.var_brand_id}}\",\n    \"method\": \"POST\",\n    \"body\": {\n        \"inventory\": [{\n\n                \"warehouse\": \"default\",\n                \"prebook\": {{57.var_prebook}},\n                \"wip\": [{\n                        \"name\": \"immediate\",\n                        \"sizes\": {{58.json}}\n                    }\n                ]\n            }\n        ]\n\n    }\n}\n",
+                                "function": "nuorder_wrapper_api",
+                                "InvocationType": "RequestResponse"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 4500,
+                                    "y": 600,
+                                    "name": "NuOder - Update inventory"
+                                },
+                                "restore": {
+                                    "function": {
+                                        "mode": "chose",
+                                        "label": "nuorder_wrapper_api ($LATEST)"
+                                    },
+                                    "__IMTCONN__": {
+                                        "label": "My Amazon Lambda connection"
+                                    },
+                                    "InvocationType": {
+                                        "mode": "chose",
+                                        "label": "Request Response"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "function",
+                                        "type": "select",
+                                        "label": "Function Name",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "InvocationType",
+                                        "type": "select",
+                                        "label": "Invocation Type",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "RequestResponse",
+                                                "Event",
+                                                "DryRun"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "body",
+                                        "type": "any",
+                                        "label": "Body"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "instant": false,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": false,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "us1.make.com"
+    }
+}

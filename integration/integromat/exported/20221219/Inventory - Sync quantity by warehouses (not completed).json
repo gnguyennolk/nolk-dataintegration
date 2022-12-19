@@ -1,0 +1,2202 @@
+{
+    "name": "Inventory - Sync quantity by warehouses (not completed)",
+    "flow": [
+        {
+            "id": 2,
+            "module": "amazon-lambda:invokeAFunction",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 2937482
+            },
+            "mapper": {
+                "body": "{\n  \"url\": \"/api/products/modified/after/1/1/2021\",\n  \"method\": \"GET\"\n}",
+                "function": "nuorder_wrapper_api",
+                "InvocationType": "RequestResponse"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 450,
+                    "name": "NuOder - Get all products"
+                },
+                "restore": {
+                    "function": {
+                        "mode": "chose",
+                        "label": "nuorder_wrapper_api ($LATEST)"
+                    },
+                    "__IMTCONN__": {
+                        "label": "My Amazon Lambda connection"
+                    },
+                    "InvocationType": {
+                        "mode": "chose",
+                        "label": "Request Response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "function",
+                        "type": "select",
+                        "label": "Function Name",
+                        "required": true
+                    },
+                    {
+                        "name": "InvocationType",
+                        "type": "select",
+                        "label": "Invocation Type",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "RequestResponse",
+                                "Event",
+                                "DryRun"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "body",
+                        "type": "any",
+                        "label": "Body"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 4,
+            "module": "json:TransformToJSON",
+            "version": 1,
+            "parameters": {
+                "space": ""
+            },
+            "mapper": {
+                "object": "{{2.body}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 450,
+                    "name": "NuOder - Products"
+                },
+                "restore": {
+                    "space": {
+                        "label": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "space",
+                        "type": "select",
+                        "label": "Indentation",
+                        "validate": {
+                            "enum": [
+                                "tab",
+                                "2",
+                                "4"
+                            ]
+                        }
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "object",
+                        "type": "any",
+                        "label": "Object"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 5,
+            "module": "json:ParseJSON",
+            "version": 1,
+            "parameters": {
+                "type": 186167
+            },
+            "mapper": {
+                "json": "{{4.json}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 600,
+                    "y": 450,
+                    "name": "NuOder - Products Parsed"
+                },
+                "restore": {
+                    "type": {
+                        "label": "nuorder_products"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "type",
+                        "type": "udt",
+                        "label": "Data structure"
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "json",
+                        "type": "text",
+                        "label": "JSON string",
+                        "required": true
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "_id",
+                        "type": "text"
+                    },
+                    {
+                        "name": "active",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "archived",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "cancelled",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "images",
+                        "type": "array"
+                    },
+                    {
+                        "name": "available_now",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "size_groups",
+                        "type": "array"
+                    },
+                    {
+                        "name": "banners",
+                        "type": "array"
+                    },
+                    {
+                        "name": "__original_composite_keys",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "__inventory",
+                        "spec": {
+                            "type": "text"
+                        },
+                        "type": "array"
+                    },
+                    {
+                        "name": "__tracks_inventory",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "__warehouses",
+                        "type": "array"
+                    },
+                    {
+                        "name": "__sold_out",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "__merchandising_order",
+                        "type": "number"
+                    },
+                    {
+                        "name": "__pack_ids",
+                        "type": "array"
+                    },
+                    {
+                        "name": "seasons",
+                        "type": "array"
+                    },
+                    {
+                        "name": "schema_id",
+                        "type": "text"
+                    },
+                    {
+                        "name": "sizes",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "size",
+                                    "type": "text"
+                                },
+                                {
+                                    "name": "upc",
+                                    "type": "text"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array"
+                    },
+                    {
+                        "name": "pricing",
+                        "spec": [
+                            {
+                                "name": "USD",
+                                "spec": [
+                                    {
+                                        "name": "wholesale",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "retail",
+                                        "type": "number"
+                                    }
+                                ],
+                                "type": "collection"
+                            }
+                        ],
+                        "type": "collection"
+                    },
+                    {
+                        "name": "name",
+                        "type": "text"
+                    },
+                    {
+                        "name": "style_number",
+                        "type": "text"
+                    },
+                    {
+                        "name": "season",
+                        "type": "text"
+                    },
+                    {
+                        "name": "color",
+                        "type": "text"
+                    },
+                    {
+                        "name": "color_code",
+                        "type": "text"
+                    },
+                    {
+                        "name": "category",
+                        "type": "text"
+                    },
+                    {
+                        "name": "subcategory",
+                        "type": "text"
+                    },
+                    {
+                        "name": "description",
+                        "type": "text"
+                    },
+                    {
+                        "name": "brand_id",
+                        "type": "text"
+                    },
+                    {
+                        "name": "__pending_initial_pricing",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "__brand_name",
+                        "type": "text"
+                    },
+                    {
+                        "name": "__size_ids",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "_id",
+                                    "type": "text"
+                                },
+                                {
+                                    "name": "size",
+                                    "type": "text"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array"
+                    },
+                    {
+                        "name": "created_on",
+                        "type": "date"
+                    },
+                    {
+                        "name": "__variant_colors",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "_id",
+                                    "type": "text"
+                                },
+                                {
+                                    "name": "color",
+                                    "type": "text"
+                                },
+                                {
+                                    "name": "ref",
+                                    "type": "text"
+                                },
+                                {
+                                    "name": "swatch",
+                                    "type": "text"
+                                },
+                                {
+                                    "name": "swatch_label",
+                                    "type": "text"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array"
+                    },
+                    {
+                        "name": "__variant_colors_inactive",
+                        "type": "array"
+                    },
+                    {
+                        "name": "__inventory_cache",
+                        "type": "array"
+                    },
+                    {
+                        "name": "__barcode",
+                        "type": "text"
+                    },
+                    {
+                        "name": "modified_on",
+                        "type": "date"
+                    },
+                    {
+                        "name": "__size_run",
+                        "type": "text"
+                    },
+                    {
+                        "name": "__size_range",
+                        "type": "text"
+                    },
+                    {
+                        "name": "unique_key",
+                        "type": "text"
+                    },
+                    {
+                        "name": "available_from",
+                        "type": "text"
+                    },
+                    {
+                        "name": "available_until",
+                        "type": "text"
+                    },
+                    {
+                        "name": "order_closing",
+                        "type": "text"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 6,
+            "module": "builtin:BasicFeeder",
+            "version": 1,
+            "parameters": {},
+            "filter": {
+                "name": "",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{5.archived}}",
+                            "b": "true",
+                            "o": "text:notequal"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "array": "{{5.brand_id}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 900,
+                    "y": 450,
+                    "name": "Brand ID"
+                },
+                "restore": {
+                    "array": {
+                        "mode": "edit"
+                    }
+                },
+                "expect": [
+                    {
+                        "mode": "edit",
+                        "name": "array",
+                        "spec": [],
+                        "type": "array",
+                        "label": "Array"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 45,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": 1200,
+                    "y": 450
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 17,
+                            "module": "amazon-lambda:invokeAFunction",
+                            "version": 1,
+                            "parameters": {
+                                "__IMTCONN__": 2937482
+                            },
+                            "mapper": {
+                                "body": "{\n  \"url\": \"/api/inventory/external_id/{{6.value}}\",\n  \"method\": \"GET\"\n}",
+                                "function": "nuorder_wrapper_api",
+                                "InvocationType": "RequestResponse"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1500,
+                                    "y": 150,
+                                    "name": "NuOrder - Get inventory"
+                                },
+                                "restore": {
+                                    "function": {
+                                        "mode": "chose",
+                                        "label": "nuorder_wrapper_api ($LATEST)"
+                                    },
+                                    "__IMTCONN__": {
+                                        "label": "My Amazon Lambda connection"
+                                    },
+                                    "InvocationType": {
+                                        "mode": "chose",
+                                        "label": "Request Response"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "function",
+                                        "type": "select",
+                                        "label": "Function Name",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "InvocationType",
+                                        "type": "select",
+                                        "label": "Invocation Type",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "RequestResponse",
+                                                "Event",
+                                                "DryRun"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "body",
+                                        "type": "any",
+                                        "label": "Body"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 18,
+                            "module": "json:TransformToJSON",
+                            "version": 1,
+                            "parameters": {
+                                "space": ""
+                            },
+                            "mapper": {
+                                "object": "{{17.body}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1800,
+                                    "y": 150,
+                                    "name": "NuOder - Inventory"
+                                },
+                                "restore": {
+                                    "space": {
+                                        "label": ""
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "space",
+                                        "type": "select",
+                                        "label": "Indentation",
+                                        "validate": {
+                                            "enum": [
+                                                "tab",
+                                                "2",
+                                                "4"
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "object",
+                                        "type": "any",
+                                        "label": "Object"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 19,
+                            "module": "json:ParseJSON",
+                            "version": 1,
+                            "parameters": {
+                                "type": 186391
+                            },
+                            "mapper": {
+                                "json": "{{18.json}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 2100,
+                                    "y": 150,
+                                    "name": "NuOder - Inventory Parsed"
+                                },
+                                "restore": {
+                                    "type": {
+                                        "label": "nuorder_inventory"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "type",
+                                        "type": "udt",
+                                        "label": "Data structure"
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "json",
+                                        "type": "text",
+                                        "label": "JSON string",
+                                        "required": true
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "inventory",
+                                        "spec": {
+                                            "spec": [
+                                                {
+                                                    "name": "warehouse",
+                                                    "type": "text"
+                                                },
+                                                {
+                                                    "name": "prebook",
+                                                    "type": "boolean"
+                                                },
+                                                {
+                                                    "name": "wip",
+                                                    "spec": {
+                                                        "spec": [
+                                                            {
+                                                                "name": "name",
+                                                                "type": "text"
+                                                            },
+                                                            {
+                                                                "name": "sizes",
+                                                                "spec": {
+                                                                    "spec": [
+                                                                        {
+                                                                            "name": "size",
+                                                                            "type": "text"
+                                                                        },
+                                                                        {
+                                                                            "name": "quantity",
+                                                                            "type": "number"
+                                                                        }
+                                                                    ],
+                                                                    "type": "collection"
+                                                                },
+                                                                "type": "array"
+                                                            },
+                                                            {
+                                                                "name": "size",
+                                                                "spec": {
+                                                                    "spec": [
+                                                                        {
+                                                                            "name": "size",
+                                                                            "type": "text"
+                                                                        },
+                                                                        {
+                                                                            "name": "quantity",
+                                                                            "type": "number"
+                                                                        }
+                                                                    ],
+                                                                    "type": "collection"
+                                                                },
+                                                                "type": "array"
+                                                            }
+                                                        ],
+                                                        "type": "collection"
+                                                    },
+                                                    "type": "array"
+                                                }
+                                            ],
+                                            "type": "collection"
+                                        },
+                                        "type": "array"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 43,
+                            "module": "builtin:BasicRouter",
+                            "version": 1,
+                            "mapper": null,
+                            "metadata": {
+                                "designer": {
+                                    "x": 2400,
+                                    "y": 150
+                                }
+                            },
+                            "routes": [
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 42,
+                                            "module": "util:SetVariable2",
+                                            "version": 1,
+                                            "parameters": {},
+                                            "mapper": {
+                                                "name": "var_brand_id",
+                                                "scope": "roundtrip",
+                                                "value": "{{6.value}}"
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 2700,
+                                                    "y": 0,
+                                                    "name": "var_brand_id"
+                                                },
+                                                "restore": {
+                                                    "scope": {
+                                                        "label": "One cycle"
+                                                    }
+                                                },
+                                                "expect": [
+                                                    {
+                                                        "name": "name",
+                                                        "type": "text",
+                                                        "label": "Variable name",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "scope",
+                                                        "type": "select",
+                                                        "label": "Variable lifetime",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "enum": [
+                                                                "roundtrip",
+                                                                "execution"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "value",
+                                                        "type": "any",
+                                                        "label": "Variable value"
+                                                    }
+                                                ],
+                                                "interface": [
+                                                    {
+                                                        "name": "var_brand_id",
+                                                        "type": "any",
+                                                        "label": "var_brand_id"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 44,
+                                            "module": "util:SetVariable2",
+                                            "version": 1,
+                                            "parameters": {},
+                                            "mapper": {
+                                                "name": "var_prebook",
+                                                "scope": "roundtrip",
+                                                "value": "{{ifempty(19.inventory[].prebook; \"false\")}}"
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 2700,
+                                                    "y": 300,
+                                                    "name": "var_prebook"
+                                                },
+                                                "restore": {
+                                                    "scope": {
+                                                        "label": "One cycle"
+                                                    }
+                                                },
+                                                "expect": [
+                                                    {
+                                                        "name": "name",
+                                                        "type": "text",
+                                                        "label": "Variable name",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "scope",
+                                                        "type": "select",
+                                                        "label": "Variable lifetime",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "enum": [
+                                                                "roundtrip",
+                                                                "execution"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "value",
+                                                        "type": "any",
+                                                        "label": "Variable value"
+                                                    }
+                                                ],
+                                                "interface": [
+                                                    {
+                                                        "name": "var_prebook",
+                                                        "type": "any",
+                                                        "label": "var_prebook"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 29,
+                            "module": "builtin:BasicFeeder",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "array": "{{5.sizes}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1220,
+                                    "y": 850
+                                },
+                                "restore": {
+                                    "array": {
+                                        "mode": "edit"
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "mode": "edit",
+                                        "name": "array",
+                                        "spec": [],
+                                        "type": "array",
+                                        "label": "Array"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 25,
+                            "module": "builtin:BasicFeeder",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "array": "{{29.upc}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1580,
+                                    "y": 846,
+                                    "name": "UPC"
+                                },
+                                "restore": {
+                                    "array": {
+                                        "mode": "edit"
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "mode": "edit",
+                                        "name": "array",
+                                        "spec": [],
+                                        "type": "array",
+                                        "label": "Array"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 8,
+                            "module": "http:ActionSendData",
+                            "version": 3,
+                            "parameters": {
+                                "handleErrors": false,
+                                "useNewZLibDeCompress": "true"
+                            },
+                            "mapper": {
+                                "ca": "",
+                                "qs": [
+                                    {
+                                        "name": "sku",
+                                        "value": "{{25.value}}"
+                                    }
+                                ],
+                                "url": "https://api.skubana.com/v1/inventory",
+                                "gzip": true,
+                                "method": "get",
+                                "headers": [
+                                    {
+                                        "name": "Content-Type",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "name": "Authorization",
+                                        "value": "Bearer a4ec01a2-a17d-4ee5-8f45-066312516744"
+                                    }
+                                ],
+                                "timeout": "",
+                                "useMtls": false,
+                                "authPass": "",
+                                "authUser": "",
+                                "bodyType": "",
+                                "serializeUrl": false,
+                                "shareCookies": false,
+                                "parseResponse": true,
+                                "followRedirect": true,
+                                "useQuerystring": false,
+                                "followAllRedirects": false,
+                                "rejectUnauthorized": true
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1937,
+                                    "y": 840,
+                                    "name": "Skubana - Get available quantity"
+                                },
+                                "restore": {
+                                    "qs": {
+                                        "mode": "chose",
+                                        "items": [
+                                            "undefined"
+                                        ]
+                                    },
+                                    "method": {
+                                        "mode": "chose",
+                                        "label": "GET"
+                                    },
+                                    "headers": {
+                                        "mode": "chose",
+                                        "items": [
+                                            "undefined",
+                                            "undefined"
+                                        ]
+                                    },
+                                    "bodyType": {
+                                        "label": ""
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "handleErrors",
+                                        "type": "boolean",
+                                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useNewZLibDeCompress",
+                                        "type": "hidden"
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "url",
+                                        "type": "url",
+                                        "label": "URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "serializeUrl",
+                                        "type": "boolean",
+                                        "label": "Serialize URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "method",
+                                        "type": "select",
+                                        "label": "Method",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "get",
+                                                "head",
+                                                "post",
+                                                "put",
+                                                "patch",
+                                                "delete",
+                                                "options"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Headers",
+                                        "labels": {
+                                            "add": "Add a header",
+                                            "edit": "Edit a header"
+                                        }
+                                    },
+                                    {
+                                        "name": "qs",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Query String",
+                                        "labels": {
+                                            "add": "Add parameter",
+                                            "edit": "Edit parameter"
+                                        }
+                                    },
+                                    {
+                                        "name": "bodyType",
+                                        "type": "select",
+                                        "label": "Body type",
+                                        "validate": {
+                                            "enum": [
+                                                "raw",
+                                                "x_www_form_urlencoded",
+                                                "multipart_form_data"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "parseResponse",
+                                        "type": "boolean",
+                                        "label": "Parse response",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "authUser",
+                                        "type": "text",
+                                        "label": "User name"
+                                    },
+                                    {
+                                        "name": "authPass",
+                                        "type": "password",
+                                        "label": "Password"
+                                    },
+                                    {
+                                        "name": "timeout",
+                                        "type": "uinteger",
+                                        "label": "Timeout",
+                                        "validate": {
+                                            "max": 300,
+                                            "min": 1
+                                        }
+                                    },
+                                    {
+                                        "name": "shareCookies",
+                                        "type": "boolean",
+                                        "label": "Share cookies with other HTTP modules",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "ca",
+                                        "type": "cert",
+                                        "label": "Self-signed certificate",
+                                        "multiline": true
+                                    },
+                                    {
+                                        "name": "rejectUnauthorized",
+                                        "type": "boolean",
+                                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "followRedirect",
+                                        "type": "boolean",
+                                        "label": "Follow redirect",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useQuerystring",
+                                        "type": "boolean",
+                                        "label": "Disable serialization of multiple same query string keys as arrays",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "gzip",
+                                        "type": "boolean",
+                                        "label": "Request compressed content",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useMtls",
+                                        "type": "boolean",
+                                        "label": "Use Mutual TLS",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "followAllRedirects",
+                                        "type": "boolean",
+                                        "label": "Follow all redirect",
+                                        "required": true
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 26,
+                            "module": "json:TransformToJSON",
+                            "version": 1,
+                            "parameters": {
+                                "space": ""
+                            },
+                            "mapper": {
+                                "object": "{{8.data}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 2303,
+                                    "y": 834
+                                },
+                                "restore": {
+                                    "space": {
+                                        "label": ""
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "space",
+                                        "type": "select",
+                                        "label": "Indentation",
+                                        "validate": {
+                                            "enum": [
+                                                "tab",
+                                                "2",
+                                                "4"
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "object",
+                                        "type": "any",
+                                        "label": "Object"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 27,
+                            "module": "json:ParseJSON",
+                            "version": 1,
+                            "parameters": {
+                                "type": 186685
+                            },
+                            "mapper": {
+                                "json": "{{26.json}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 2669,
+                                    "y": 826,
+                                    "name": "Skubana - Inventory JSON Parsed"
+                                },
+                                "restore": {
+                                    "type": {
+                                        "label": "skubana_product_stocks"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "type",
+                                        "type": "udt",
+                                        "label": "Data structure"
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "json",
+                                        "type": "text",
+                                        "label": "JSON string",
+                                        "required": true
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "active",
+                                        "type": "boolean"
+                                    },
+                                    {
+                                        "name": "allocatedQuantity",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "availableQuantity",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "drawRank",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "minStock",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "pickable",
+                                        "type": "boolean"
+                                    },
+                                    {
+                                        "name": "product",
+                                        "spec": [
+                                            {
+                                                "name": "description",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "fnSku",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "hazmat",
+                                                "type": "boolean"
+                                            },
+                                            {
+                                                "name": "masterSku",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "mpn",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "name",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "productId",
+                                                "type": "number"
+                                            },
+                                            {
+                                                "name": "productType",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "productWeight",
+                                                "type": "number"
+                                            },
+                                            {
+                                                "name": "upc",
+                                                "type": "text"
+                                            }
+                                        ],
+                                        "type": "collection"
+                                    },
+                                    {
+                                        "name": "productStockId",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "quantity",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "quantityLocked",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "receivable",
+                                        "type": "boolean"
+                                    },
+                                    {
+                                        "name": "stockLocation",
+                                        "spec": [
+                                            {
+                                                "name": "location",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "stockLocationId",
+                                                "type": "number"
+                                            },
+                                            {
+                                                "name": "warehouseId",
+                                                "type": "number"
+                                            }
+                                        ],
+                                        "type": "collection"
+                                    },
+                                    {
+                                        "name": "warehouseStockTotals",
+                                        "spec": [
+                                            {
+                                                "name": "allocatedQuantity",
+                                                "type": "number"
+                                            },
+                                            {
+                                                "name": "availableQuantity",
+                                                "type": "number"
+                                            },
+                                            {
+                                                "name": "inTransitQuantity",
+                                                "type": "number"
+                                            },
+                                            {
+                                                "name": "lockedQuantity",
+                                                "type": "number"
+                                            },
+                                            {
+                                                "name": "onHandQuantity",
+                                                "type": "number"
+                                            }
+                                        ],
+                                        "type": "collection"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 30,
+                            "module": "http:ActionSendData",
+                            "version": 3,
+                            "parameters": {
+                                "handleErrors": false,
+                                "useNewZLibDeCompress": "true"
+                            },
+                            "mapper": {
+                                "ca": "",
+                                "qs": [],
+                                "url": "https://api.skubana.com/v1/warehouse/{{27.stockLocation.warehouseId}}",
+                                "gzip": true,
+                                "method": "get",
+                                "headers": [
+                                    {
+                                        "name": "Content-Type",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "name": "Authorization",
+                                        "value": "Bearer a4ec01a2-a17d-4ee5-8f45-066312516744"
+                                    }
+                                ],
+                                "timeout": "",
+                                "useMtls": false,
+                                "authPass": "",
+                                "authUser": "",
+                                "bodyType": "",
+                                "serializeUrl": false,
+                                "shareCookies": false,
+                                "parseResponse": true,
+                                "followRedirect": true,
+                                "useQuerystring": false,
+                                "followAllRedirects": false,
+                                "rejectUnauthorized": true
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 3023,
+                                    "y": 819,
+                                    "name": "Skubana - Get warehouse name"
+                                },
+                                "restore": {
+                                    "qs": {
+                                        "mode": "chose",
+                                        "items": []
+                                    },
+                                    "method": {
+                                        "mode": "chose",
+                                        "label": "GET"
+                                    },
+                                    "headers": {
+                                        "mode": "chose",
+                                        "items": [
+                                            "undefined",
+                                            "undefined"
+                                        ]
+                                    },
+                                    "bodyType": {
+                                        "label": ""
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "handleErrors",
+                                        "type": "boolean",
+                                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useNewZLibDeCompress",
+                                        "type": "hidden"
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "url",
+                                        "type": "url",
+                                        "label": "URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "serializeUrl",
+                                        "type": "boolean",
+                                        "label": "Serialize URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "method",
+                                        "type": "select",
+                                        "label": "Method",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "get",
+                                                "head",
+                                                "post",
+                                                "put",
+                                                "patch",
+                                                "delete",
+                                                "options"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Headers",
+                                        "labels": {
+                                            "add": "Add a header",
+                                            "edit": "Edit a header"
+                                        }
+                                    },
+                                    {
+                                        "name": "qs",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Query String",
+                                        "labels": {
+                                            "add": "Add parameter",
+                                            "edit": "Edit parameter"
+                                        }
+                                    },
+                                    {
+                                        "name": "bodyType",
+                                        "type": "select",
+                                        "label": "Body type",
+                                        "validate": {
+                                            "enum": [
+                                                "raw",
+                                                "x_www_form_urlencoded",
+                                                "multipart_form_data"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "parseResponse",
+                                        "type": "boolean",
+                                        "label": "Parse response",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "authUser",
+                                        "type": "text",
+                                        "label": "User name"
+                                    },
+                                    {
+                                        "name": "authPass",
+                                        "type": "password",
+                                        "label": "Password"
+                                    },
+                                    {
+                                        "name": "timeout",
+                                        "type": "uinteger",
+                                        "label": "Timeout",
+                                        "validate": {
+                                            "max": 300,
+                                            "min": 1
+                                        }
+                                    },
+                                    {
+                                        "name": "shareCookies",
+                                        "type": "boolean",
+                                        "label": "Share cookies with other HTTP modules",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "ca",
+                                        "type": "cert",
+                                        "label": "Self-signed certificate",
+                                        "multiline": true
+                                    },
+                                    {
+                                        "name": "rejectUnauthorized",
+                                        "type": "boolean",
+                                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "followRedirect",
+                                        "type": "boolean",
+                                        "label": "Follow redirect",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useQuerystring",
+                                        "type": "boolean",
+                                        "label": "Disable serialization of multiple same query string keys as arrays",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "gzip",
+                                        "type": "boolean",
+                                        "label": "Request compressed content",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useMtls",
+                                        "type": "boolean",
+                                        "label": "Use Mutual TLS",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "followAllRedirects",
+                                        "type": "boolean",
+                                        "label": "Follow all redirect",
+                                        "required": true
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 32,
+                            "module": "json:TransformToJSON",
+                            "version": 1,
+                            "parameters": {
+                                "space": ""
+                            },
+                            "filter": {
+                                "name": "",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{30.fileSize}}",
+                                            "b": "0",
+                                            "o": "number:greater"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "object": "{{30.data}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 3377,
+                                    "y": 815
+                                },
+                                "restore": {
+                                    "space": {
+                                        "label": ""
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "space",
+                                        "type": "select",
+                                        "label": "Indentation",
+                                        "validate": {
+                                            "enum": [
+                                                "tab",
+                                                "2",
+                                                "4"
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "object",
+                                        "type": "any",
+                                        "label": "Object"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 33,
+                            "module": "json:ParseJSON",
+                            "version": 1,
+                            "parameters": {
+                                "type": 186687
+                            },
+                            "mapper": {
+                                "json": "{{32.json}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 3724,
+                                    "y": 809,
+                                    "name": "Skubana - Warehouse JSON Parsed"
+                                },
+                                "restore": {
+                                    "type": {
+                                        "label": "skubana_warehouse"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "type",
+                                        "type": "udt",
+                                        "label": "Data structure"
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "json",
+                                        "type": "text",
+                                        "label": "JSON string",
+                                        "required": true
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "active",
+                                        "type": "boolean"
+                                    },
+                                    {
+                                        "name": "address",
+                                        "spec": [
+                                            {
+                                                "name": "address1",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "address2",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "address3",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "addressId",
+                                                "type": "number"
+                                            },
+                                            {
+                                                "name": "city",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "country",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "province",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "state",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "type",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "zipCode",
+                                                "type": "text"
+                                            }
+                                        ],
+                                        "type": "collection"
+                                    },
+                                    {
+                                        "name": "contactEmail",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "contactPhone",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "domesticBackups",
+                                        "type": "array"
+                                    },
+                                    {
+                                        "name": "fax",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "internationalRank",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "name",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "phoneExtension",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "returnsLocation",
+                                        "spec": [
+                                            {
+                                                "name": "address",
+                                                "spec": [
+                                                    {
+                                                        "name": "address1",
+                                                        "type": "text"
+                                                    },
+                                                    {
+                                                        "name": "address2",
+                                                        "type": "text"
+                                                    },
+                                                    {
+                                                        "name": "address3",
+                                                        "type": "text"
+                                                    },
+                                                    {
+                                                        "name": "addressId",
+                                                        "type": "number"
+                                                    },
+                                                    {
+                                                        "name": "city",
+                                                        "type": "text"
+                                                    },
+                                                    {
+                                                        "name": "country",
+                                                        "type": "text"
+                                                    },
+                                                    {
+                                                        "name": "province",
+                                                        "type": "text"
+                                                    },
+                                                    {
+                                                        "name": "state",
+                                                        "type": "text"
+                                                    },
+                                                    {
+                                                        "name": "type",
+                                                        "type": "text"
+                                                    },
+                                                    {
+                                                        "name": "zipCode",
+                                                        "type": "text"
+                                                    }
+                                                ],
+                                                "type": "collection"
+                                            },
+                                            {
+                                                "name": "attention",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "name",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "phone",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "phoneExtension",
+                                                "type": "text"
+                                            }
+                                        ],
+                                        "type": "collection"
+                                    },
+                                    {
+                                        "name": "salesChannelId",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "stateAllocations",
+                                        "spec": {
+                                            "type": "text"
+                                        },
+                                        "type": "array"
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "warehouseId",
+                                        "type": "number"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 37,
+                            "module": "builtin:BasicRouter",
+                            "version": 1,
+                            "mapper": null,
+                            "metadata": {
+                                "designer": {
+                                    "x": 4009,
+                                    "y": 794
+                                }
+                            },
+                            "routes": [
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 31,
+                                            "module": "amazon-lambda:invokeAFunction",
+                                            "version": 1,
+                                            "parameters": {
+                                                "__IMTCONN__": 2937482
+                                            },
+                                            "mapper": {
+                                                "body": "{\n  \"url\": \"/api/v3.0/warehouses?display_name={{33.name}}\",\n  \"method\": \"GET\"\n}",
+                                                "function": "nuorder_wrapper_api",
+                                                "InvocationType": "RequestResponse"
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 4241,
+                                                    "y": 580,
+                                                    "name": "NuOder - Check warehouse existed?"
+                                                },
+                                                "restore": {
+                                                    "function": {
+                                                        "mode": "chose",
+                                                        "label": "nuorder_wrapper_api ($LATEST)"
+                                                    },
+                                                    "__IMTCONN__": {
+                                                        "label": "My Amazon Lambda connection"
+                                                    },
+                                                    "InvocationType": {
+                                                        "mode": "chose",
+                                                        "label": "Request Response"
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "__IMTCONN__",
+                                                        "type": "account",
+                                                        "label": "Connection",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "function",
+                                                        "type": "select",
+                                                        "label": "Function Name",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "InvocationType",
+                                                        "type": "select",
+                                                        "label": "Invocation Type",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "enum": [
+                                                                "RequestResponse",
+                                                                "Event",
+                                                                "DryRun"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "body",
+                                                        "type": "any",
+                                                        "label": "Body"
+                                                    }
+                                                ]
+                                            },
+                                            "onerror": [
+                                                {
+                                                    "id": 35,
+                                                    "module": "amazon-lambda:invokeAFunction",
+                                                    "version": 1,
+                                                    "parameters": {
+                                                        "__IMTCONN__": 2937482
+                                                    },
+                                                    "mapper": {
+                                                        "body": "{\n  \"url\": \"/api/v3.0/warehouses\",\n  \"method\": \"POST\",\n  \"body\": {    \n    \"display_name\": \"{{33.name}}\",\n    \"code\": \"{{33.name}}\",\n    \"sort\": \"1\",\n    \"allows_overselling\": \"false\"\n    }\n}",
+                                                        "function": "nuorder_wrapper_api",
+                                                        "InvocationType": "RequestResponse"
+                                                    },
+                                                    "metadata": {
+                                                        "designer": {
+                                                            "x": 4549,
+                                                            "y": 574,
+                                                            "name": "NuOder - Create new warehouse"
+                                                        },
+                                                        "restore": {
+                                                            "function": {
+                                                                "mode": "chose",
+                                                                "label": "nuorder_wrapper_api ($LATEST)"
+                                                            },
+                                                            "__IMTCONN__": {
+                                                                "label": "My Amazon Lambda connection"
+                                                            },
+                                                            "InvocationType": {
+                                                                "mode": "chose",
+                                                                "label": "Request Response"
+                                                            }
+                                                        },
+                                                        "parameters": [
+                                                            {
+                                                                "name": "__IMTCONN__",
+                                                                "type": "account",
+                                                                "label": "Connection",
+                                                                "required": true
+                                                            }
+                                                        ],
+                                                        "expect": [
+                                                            {
+                                                                "name": "function",
+                                                                "type": "select",
+                                                                "label": "Function Name",
+                                                                "required": true
+                                                            },
+                                                            {
+                                                                "name": "InvocationType",
+                                                                "type": "select",
+                                                                "label": "Invocation Type",
+                                                                "required": true,
+                                                                "validate": {
+                                                                    "enum": [
+                                                                        "RequestResponse",
+                                                                        "Event",
+                                                                        "DryRun"
+                                                                    ]
+                                                                }
+                                                            },
+                                                            {
+                                                                "name": "body",
+                                                                "type": "any",
+                                                                "label": "Body"
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 58,
+                                            "module": "json:AggregateToJSON",
+                                            "version": 1,
+                                            "parameters": {
+                                                "type": 186739,
+                                                "space": "",
+                                                "feeder": 6
+                                            },
+                                            "mapper": {
+                                                "upc": "{{29.upc}}",
+                                                "size": "{{29.size}}",
+                                                "quantity": "{{27.availableQuantity}}"
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 4278,
+                                                    "y": 945
+                                                },
+                                                "restore": {
+                                                    "type": {
+                                                        "label": "nuorder_inventory_product_size"
+                                                    },
+                                                    "space": {
+                                                        "label": ""
+                                                    },
+                                                    "feeder": {
+                                                        "label": "Brand ID [6]"
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "type",
+                                                        "type": "udt",
+                                                        "label": "Data structure",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "space",
+                                                        "type": "select",
+                                                        "label": "Indentation",
+                                                        "validate": {
+                                                            "enum": [
+                                                                "tab",
+                                                                "2",
+                                                                "4"
+                                                            ]
+                                                        }
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "size",
+                                                        "type": "text"
+                                                    },
+                                                    {
+                                                        "name": "upc",
+                                                        "type": "text"
+                                                    },
+                                                    {
+                                                        "name": "quantity",
+                                                        "type": "number"
+                                                    }
+                                                ],
+                                                "advanced": true
+                                            }
+                                        },
+                                        {
+                                            "id": 56,
+                                            "module": "util:GetVariable2",
+                                            "version": 1,
+                                            "parameters": {},
+                                            "mapper": {
+                                                "name": "var_brand_id"
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 4580,
+                                                    "y": 951
+                                                },
+                                                "expect": [
+                                                    {
+                                                        "name": "name",
+                                                        "type": "text",
+                                                        "label": "Variable name",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "interface": [
+                                                    {
+                                                        "name": "var_brand_id",
+                                                        "type": "any",
+                                                        "label": "var_brand_id"
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "id": 57,
+                                            "module": "util:GetVariable2",
+                                            "version": 1,
+                                            "parameters": {},
+                                            "mapper": {
+                                                "name": "var_prebook"
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 4877,
+                                                    "y": 952
+                                                },
+                                                "expect": [
+                                                    {
+                                                        "name": "name",
+                                                        "type": "text",
+                                                        "label": "Variable name",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "interface": [
+                                                    {
+                                                        "name": "var_prebook",
+                                                        "type": "any",
+                                                        "label": "var_prebook"
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "id": 65,
+                                            "module": "amazon-lambda:invokeAFunction",
+                                            "version": 1,
+                                            "parameters": {
+                                                "__IMTCONN__": 2937482
+                                            },
+                                            "filter": {
+                                                "name": "",
+                                                "conditions": [
+                                                    [
+                                                        {
+                                                            "a": "{{58.json}}",
+                                                            "b": "[]",
+                                                            "o": "text:notequal"
+                                                        }
+                                                    ]
+                                                ]
+                                            },
+                                            "mapper": {
+                                                "body": "{\n    \"url\": \"/api/inventory/external_id/{{56.var_brand_id}}\",\n    \"method\": \"POST\",\n    \"body\": {\n        \"inventory\": [{\n\n                \"warehouse\": \"NuOrder Testing Warehouse\",\n                \"prebook\": {{57.var_prebook}},\n                \"wip\": [{\n                        \"name\": \"immediate\",\n                        \"sizes\": {{58.json}}\n                    }\n                ]\n            }\n        ]\n\n    }\n}\n",
+                                                "function": "nuorder_wrapper_api",
+                                                "InvocationType": "RequestResponse"
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 5172,
+                                                    "y": 950
+                                                },
+                                                "restore": {
+                                                    "function": {
+                                                        "mode": "chose",
+                                                        "label": "nuorder_wrapper_api ($LATEST)"
+                                                    },
+                                                    "__IMTCONN__": {
+                                                        "label": "My Amazon Lambda connection"
+                                                    },
+                                                    "InvocationType": {
+                                                        "mode": "chose",
+                                                        "label": "Request Response"
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "__IMTCONN__",
+                                                        "type": "account",
+                                                        "label": "Connection",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "function",
+                                                        "type": "select",
+                                                        "label": "Function Name",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "InvocationType",
+                                                        "type": "select",
+                                                        "label": "Invocation Type",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "enum": [
+                                                                "RequestResponse",
+                                                                "Event",
+                                                                "DryRun"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "body",
+                                                        "type": "any",
+                                                        "label": "Body"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "shatter": false,
+            "maxErrors": 3,
+            "autoCommit": false,
+            "sequential": false,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "eu1.integromat.com"
+    }
+}

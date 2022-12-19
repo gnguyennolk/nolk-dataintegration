@@ -1,0 +1,2579 @@
+{
+    "name": "Orders - Skubana to NuOder - Update shipping information (Old)",
+    "flow": [
+        {
+            "id": 23,
+            "module": "util:SetVariables",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "scope": "roundtrip",
+                "variables": [
+                    {
+                        "name": "v_skubana_api_domain",
+                        "value": "https://api.demo.skubana.com"
+                    },
+                    {
+                        "name": "v_skubana_access_token",
+                        "value": "f5f549b9-6853-4785-b07e-a1bcc0a73878"
+                    },
+                    {
+                        "name": "v_skubana_nuoder_sales_channel_id",
+                        "value": "2229"
+                    },
+                    {
+                        "name": "v_receipt_1",
+                        "value": "gnguyen@nolk.com"
+                    },
+                    {
+                        "name": "v_receipt_2",
+                        "value": "os@nolk.com"
+                    }
+                ]
+            },
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 450,
+                    "name": "Setup Variables"
+                },
+                "restore": {
+                    "scope": {
+                        "label": "One cycle"
+                    },
+                    "variables": {
+                        "items": [
+                            "undefined",
+                            "undefined",
+                            "undefined",
+                            "undefined",
+                            "undefined"
+                        ]
+                    }
+                },
+                "expect": [
+                    {
+                        "name": "variables",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Variable name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "any",
+                                "label": "Variable value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Variables"
+                    },
+                    {
+                        "name": "scope",
+                        "type": "select",
+                        "label": "Variable lifetime",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "roundtrip",
+                                "execution"
+                            ]
+                        }
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "v_skubana_api_domain",
+                        "type": "any",
+                        "label": "v_skubana_api_domain"
+                    },
+                    {
+                        "name": "v_skubana_access_token",
+                        "type": "any",
+                        "label": "v_skubana_access_token"
+                    },
+                    {
+                        "name": "v_skubana_nuoder_sales_channel_id",
+                        "type": "any",
+                        "label": "v_skubana_nuoder_sales_channel_id"
+                    },
+                    {
+                        "name": "v_receipt_1",
+                        "type": "any",
+                        "label": "v_receipt_1"
+                    },
+                    {
+                        "name": "v_receipt_2",
+                        "type": "any",
+                        "label": "v_receipt_2"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 24,
+            "module": "util:GetVariables",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "variables": [
+                    "{{23.v_skubana_api_domain}}",
+                    "{{23.v_skubana_access_token}}",
+                    "{{23.v_skubana_nuoder_sales_channel_id}}",
+                    "{{23.v_receipt_1}}",
+                    "{{23.v_receipt_2}}"
+                ]
+            },
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 450,
+                    "name": "Get Variables"
+                },
+                "restore": {
+                    "variables": {
+                        "items": [
+                            "undefined",
+                            "undefined",
+                            "undefined",
+                            "undefined",
+                            "undefined"
+                        ]
+                    }
+                },
+                "expect": [
+                    {
+                        "name": "variables",
+                        "spec": {
+                            "name": "name",
+                            "type": "text",
+                            "label": "Variable name",
+                            "required": true
+                        },
+                        "type": "array",
+                        "label": "Variables"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "https://api.demo.skubana.com...",
+                        "type": "any",
+                        "label": "https://api.demo.skubana.com..."
+                    },
+                    {
+                        "name": "f5f549b9-6853-4785-b07e-a1bcc0a73878...",
+                        "type": "any",
+                        "label": "f5f549b9-6853-4785-b07e-a1bcc0a73878..."
+                    },
+                    {
+                        "name": "2229...",
+                        "type": "any",
+                        "label": "2229..."
+                    },
+                    {
+                        "name": null,
+                        "type": "any",
+                        "label": null
+                    }
+                ]
+            }
+        },
+        {
+            "id": 25,
+            "module": "amazon-lambda:invokeAFunction",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 2937482
+            },
+            "mapper": {
+                "body": "{\n  \"url\": \"/api/orders/processed/detail\",\n  \"method\": \"GET\"\n}",
+                "function": "nuorder_wrapper_api",
+                "InvocationType": "RequestResponse"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 600,
+                    "y": 450,
+                    "name": "NuOder - Get processed orders"
+                },
+                "restore": {
+                    "function": {
+                        "mode": "chose",
+                        "label": "nuorder_wrapper_api ($LATEST)"
+                    },
+                    "__IMTCONN__": {
+                        "label": "My Amazon Lambda connection"
+                    },
+                    "InvocationType": {
+                        "mode": "chose",
+                        "label": "Request Response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "function",
+                        "type": "select",
+                        "label": "Function Name",
+                        "required": true
+                    },
+                    {
+                        "name": "InvocationType",
+                        "type": "select",
+                        "label": "Invocation Type",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "RequestResponse",
+                                "Event",
+                                "DryRun"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "body",
+                        "type": "any",
+                        "label": "Body"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 6,
+            "module": "json:TransformToJSON",
+            "version": 1,
+            "parameters": {
+                "space": ""
+            },
+            "filter": {
+                "name": "",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{ifempty(25.body)}}",
+                            "b": "false",
+                            "o": "text:equal"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "object": "{{25.body}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 900,
+                    "y": 450
+                },
+                "restore": {
+                    "space": {
+                        "label": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "space",
+                        "type": "select",
+                        "label": "Indentation",
+                        "validate": {
+                            "enum": [
+                                "tab",
+                                "2",
+                                "4"
+                            ]
+                        }
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "object",
+                        "type": "any",
+                        "label": "Object"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 7,
+            "module": "json:ParseJSON",
+            "version": 1,
+            "parameters": {
+                "type": 185916
+            },
+            "mapper": {
+                "json": "{{6.json}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1200,
+                    "y": 450
+                },
+                "restore": {
+                    "type": {
+                        "label": "nuorder_orders"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "type",
+                        "type": "udt",
+                        "label": "Data structure"
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "json",
+                        "type": "text",
+                        "label": "JSON string",
+                        "required": true
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "_id",
+                        "type": "text"
+                    },
+                    {
+                        "name": "split",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "buyer_submitted",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "easy_order_viewed",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "easy_order_ready",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "collaborative_draft",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "edited",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "payment_status",
+                        "type": "text"
+                    },
+                    {
+                        "name": "is_drop_ship",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "__shipment_status",
+                        "type": "array"
+                    },
+                    {
+                        "name": "__uninitiated_order",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "__includes_cancelled",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "__cancelled_units",
+                        "type": "number"
+                    },
+                    {
+                        "name": "__cancelled_total",
+                        "type": "number"
+                    },
+                    {
+                        "name": "__is_rtp",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "creator_name",
+                        "type": "text"
+                    },
+                    {
+                        "name": "schema_id",
+                        "type": "text"
+                    },
+                    {
+                        "name": "line_items",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "product",
+                                    "spec": [
+                                        {
+                                            "name": "_id",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "style_number",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "color",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "color_code",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "brand_id",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "season",
+                                            "type": "text"
+                                        }
+                                    ],
+                                    "type": "collection"
+                                },
+                                {
+                                    "name": "ship_start",
+                                    "type": "date"
+                                },
+                                {
+                                    "name": "ship_end",
+                                    "type": "date"
+                                },
+                                {
+                                    "name": "sizes",
+                                    "spec": {
+                                        "spec": [
+                                            {
+                                                "name": "size",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "quantity",
+                                                "type": "number"
+                                            },
+                                            {
+                                                "name": "price",
+                                                "type": "number"
+                                            },
+                                            {
+                                                "name": "original_price",
+                                                "type": "number"
+                                            },
+                                            {
+                                                "name": "upc",
+                                                "type": "text"
+                                            }
+                                        ],
+                                        "type": "collection"
+                                    },
+                                    "type": "array"
+                                },
+                                {
+                                    "name": "discount",
+                                    "type": "number"
+                                },
+                                {
+                                    "name": "warehouse",
+                                    "type": "text"
+                                },
+                                {
+                                    "name": "prebook",
+                                    "type": "boolean"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array"
+                    },
+                    {
+                        "name": "status",
+                        "type": "text"
+                    },
+                    {
+                        "name": "currency_code",
+                        "type": "text"
+                    },
+                    {
+                        "name": "order_group_id",
+                        "type": "text"
+                    },
+                    {
+                        "name": "total",
+                        "type": "number"
+                    },
+                    {
+                        "name": "__split_overrides",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "_id",
+                                    "type": "text"
+                                },
+                                {
+                                    "name": "key",
+                                    "type": "text"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array"
+                    },
+                    {
+                        "name": "discount",
+                        "type": "number"
+                    },
+                    {
+                        "name": "retailer",
+                        "spec": [
+                            {
+                                "name": "_id",
+                                "type": "text"
+                            },
+                            {
+                                "name": "retailer_name",
+                                "type": "text"
+                            },
+                            {
+                                "name": "retailer_code",
+                                "type": "text"
+                            },
+                            {
+                                "name": "buyer_name",
+                                "type": "text"
+                            },
+                            {
+                                "name": "buyer_email",
+                                "type": "text"
+                            }
+                        ],
+                        "type": "collection"
+                    },
+                    {
+                        "name": "additional_percentage",
+                        "type": "number"
+                    },
+                    {
+                        "name": "additional_percentage_label",
+                        "type": "text"
+                    },
+                    {
+                        "name": "order_type",
+                        "type": "text"
+                    },
+                    {
+                        "name": "style_number",
+                        "type": "text"
+                    },
+                    {
+                        "name": "billing_address",
+                        "spec": [
+                            {
+                                "name": "country",
+                                "type": "text"
+                            },
+                            {
+                                "name": "line_1",
+                                "type": "text"
+                            },
+                            {
+                                "name": "display_name",
+                                "type": "text"
+                            },
+                            {
+                                "name": "city",
+                                "type": "text"
+                            },
+                            {
+                                "name": "state",
+                                "type": "text"
+                            },
+                            {
+                                "name": "zip",
+                                "type": "text"
+                            },
+                            {
+                                "name": "code",
+                                "type": "text"
+                            }
+                        ],
+                        "type": "collection"
+                    },
+                    {
+                        "name": "shipping_address",
+                        "spec": [
+                            {
+                                "name": "country",
+                                "type": "text"
+                            },
+                            {
+                                "name": "line_1",
+                                "type": "text"
+                            },
+                            {
+                                "name": "display_name",
+                                "type": "text"
+                            },
+                            {
+                                "name": "city",
+                                "type": "text"
+                            },
+                            {
+                                "name": "state",
+                                "type": "text"
+                            },
+                            {
+                                "name": "zip",
+                                "type": "text"
+                            },
+                            {
+                                "name": "code",
+                                "type": "text"
+                            }
+                        ],
+                        "type": "collection"
+                    },
+                    {
+                        "name": "order_number",
+                        "type": "text"
+                    },
+                    {
+                        "name": "customer_po_number",
+                        "type": "text"
+                    },
+                    {
+                        "name": "notes",
+                        "type": "text"
+                    },
+                    {
+                        "name": "locked",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "total_quantity",
+                        "type": "number"
+                    },
+                    {
+                        "name": "draft_modified_on",
+                        "type": "date"
+                    },
+                    {
+                        "name": "admin_pdf",
+                        "type": "text"
+                    },
+                    {
+                        "name": "manager_pdf",
+                        "type": "text"
+                    },
+                    {
+                        "name": "rep_pdf",
+                        "type": "text"
+                    },
+                    {
+                        "name": "buyer_pdf",
+                        "type": "text"
+                    },
+                    {
+                        "name": "tech_pdf",
+                        "type": "text"
+                    },
+                    {
+                        "name": "existing_pdf_linesheet",
+                        "type": "text"
+                    },
+                    {
+                        "name": "submitted_by",
+                        "type": "text"
+                    },
+                    {
+                        "name": "selected_shipping_locations",
+                        "type": "array"
+                    },
+                    {
+                        "name": "created_on",
+                        "type": "date"
+                    },
+                    {
+                        "name": "shipments",
+                        "type": "array"
+                    },
+                    {
+                        "name": "modified_on",
+                        "type": "date"
+                    },
+                    {
+                        "name": "rep_name",
+                        "type": "text"
+                    },
+                    {
+                        "name": "rep_code",
+                        "type": "text"
+                    },
+                    {
+                        "name": "rep_email",
+                        "type": "text"
+                    },
+                    {
+                        "name": "start_ship",
+                        "type": "date"
+                    },
+                    {
+                        "name": "end_ship",
+                        "type": "date"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 8,
+            "module": "builtin:BasicFeeder",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "array": "{{7.order_number}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1500,
+                    "y": 450,
+                    "name": "Loop Order Number"
+                },
+                "restore": {
+                    "array": {
+                        "mode": "edit"
+                    }
+                },
+                "expect": [
+                    {
+                        "mode": "edit",
+                        "name": "array",
+                        "spec": [],
+                        "type": "array",
+                        "label": "Array"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 4,
+            "module": "http:ActionSendData",
+            "version": 3,
+            "parameters": {
+                "handleErrors": false,
+                "useNewZLibDeCompress": "true"
+            },
+            "mapper": {
+                "ca": "",
+                "qs": [],
+                "url": "{{23.v_skubana_api_domain}}/v1.1/orders?salesChannelId={{23.v_skubana_nuoder_sales_channel_id}}&orderNumber={{8.value}}",
+                "gzip": true,
+                "method": "get",
+                "headers": [
+                    {
+                        "name": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "name": "Authorization",
+                        "value": "Bearer {{23.v_skubana_access_token}}"
+                    }
+                ],
+                "timeout": "",
+                "useMtls": false,
+                "authPass": "",
+                "authUser": "",
+                "bodyType": "",
+                "serializeUrl": false,
+                "shareCookies": false,
+                "parseResponse": false,
+                "followRedirect": true,
+                "useQuerystring": false,
+                "followAllRedirects": false,
+                "rejectUnauthorized": true
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1800,
+                    "y": 450,
+                    "name": "Skubana - Get NuOder orders"
+                },
+                "restore": {
+                    "qs": {
+                        "mode": "chose",
+                        "items": []
+                    },
+                    "method": {
+                        "mode": "chose",
+                        "label": "GET"
+                    },
+                    "headers": {
+                        "mode": "chose",
+                        "items": [
+                            "undefined",
+                            "undefined"
+                        ]
+                    },
+                    "bodyType": {
+                        "label": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "handleErrors",
+                        "type": "boolean",
+                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                        "required": true
+                    },
+                    {
+                        "name": "useNewZLibDeCompress",
+                        "type": "hidden"
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "url",
+                        "type": "url",
+                        "label": "URL",
+                        "required": true
+                    },
+                    {
+                        "name": "serializeUrl",
+                        "type": "boolean",
+                        "label": "Serialize URL",
+                        "required": true
+                    },
+                    {
+                        "name": "method",
+                        "type": "select",
+                        "label": "Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "get",
+                                "head",
+                                "post",
+                                "put",
+                                "patch",
+                                "delete",
+                                "options"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "headers",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Headers",
+                        "labels": {
+                            "add": "Add a header",
+                            "edit": "Edit a header"
+                        }
+                    },
+                    {
+                        "name": "qs",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Query String",
+                        "labels": {
+                            "add": "Add parameter",
+                            "edit": "Edit parameter"
+                        }
+                    },
+                    {
+                        "name": "bodyType",
+                        "type": "select",
+                        "label": "Body type",
+                        "validate": {
+                            "enum": [
+                                "raw",
+                                "x_www_form_urlencoded",
+                                "multipart_form_data"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "parseResponse",
+                        "type": "boolean",
+                        "label": "Parse response",
+                        "required": true
+                    },
+                    {
+                        "name": "authUser",
+                        "type": "text",
+                        "label": "User name"
+                    },
+                    {
+                        "name": "authPass",
+                        "type": "password",
+                        "label": "Password"
+                    },
+                    {
+                        "name": "timeout",
+                        "type": "uinteger",
+                        "label": "Timeout",
+                        "validate": {
+                            "max": 300,
+                            "min": 1
+                        }
+                    },
+                    {
+                        "name": "shareCookies",
+                        "type": "boolean",
+                        "label": "Share cookies with other HTTP modules",
+                        "required": true
+                    },
+                    {
+                        "name": "ca",
+                        "type": "cert",
+                        "label": "Self-signed certificate",
+                        "multiline": true
+                    },
+                    {
+                        "name": "rejectUnauthorized",
+                        "type": "boolean",
+                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                        "required": true
+                    },
+                    {
+                        "name": "followRedirect",
+                        "type": "boolean",
+                        "label": "Follow redirect",
+                        "required": true
+                    },
+                    {
+                        "name": "useQuerystring",
+                        "type": "boolean",
+                        "label": "Disable serialization of multiple same query string keys as arrays",
+                        "required": true
+                    },
+                    {
+                        "name": "gzip",
+                        "type": "boolean",
+                        "label": "Request compressed content",
+                        "required": true
+                    },
+                    {
+                        "name": "useMtls",
+                        "type": "boolean",
+                        "label": "Use Mutual TLS",
+                        "required": true
+                    },
+                    {
+                        "name": "followAllRedirects",
+                        "type": "boolean",
+                        "label": "Follow all redirect",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "module": "json:ParseJSON",
+            "version": 1,
+            "parameters": {
+                "type": 187165
+            },
+            "mapper": {
+                "json": "{{4.data}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 2100,
+                    "y": 450
+                },
+                "restore": {
+                    "type": {
+                        "label": "skubana_orders"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "type",
+                        "type": "udt",
+                        "label": "Data structure"
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "json",
+                        "type": "text",
+                        "label": "JSON string",
+                        "required": true
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "amountPaid",
+                        "spec": [
+                            {
+                                "name": "amount",
+                                "type": "number"
+                            },
+                            {
+                                "name": "currency",
+                                "type": "text"
+                            }
+                        ],
+                        "type": "collection"
+                    },
+                    {
+                        "name": "billDutiesToPayor",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "confirmationCost",
+                        "spec": [
+                            {
+                                "name": "amount",
+                                "type": "number"
+                            },
+                            {
+                                "name": "currency",
+                                "type": "text"
+                            }
+                        ],
+                        "type": "collection"
+                    },
+                    {
+                        "name": "containsAlcohol",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "containsDryIce",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "customField1",
+                        "type": "text"
+                    },
+                    {
+                        "name": "customField2",
+                        "type": "text"
+                    },
+                    {
+                        "name": "customField3",
+                        "type": "text"
+                    },
+                    {
+                        "name": "customShipBilling",
+                        "spec": [
+                            {
+                                "name": "accountNumber",
+                                "type": "text"
+                            },
+                            {
+                                "name": "billingZipCode",
+                                "type": "text"
+                            },
+                            {
+                                "name": "codAmount",
+                                "spec": [
+                                    {
+                                        "name": "amount",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "currency",
+                                        "type": "text"
+                                    }
+                                ],
+                                "type": "collection"
+                            },
+                            {
+                                "name": "country",
+                                "type": "text"
+                            }
+                        ],
+                        "type": "collection"
+                    },
+                    {
+                        "name": "customShipBillingOption",
+                        "type": "text"
+                    },
+                    {
+                        "name": "customsDeclarationItems",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "country",
+                                    "type": "text"
+                                },
+                                {
+                                    "name": "declaredValue",
+                                    "spec": [
+                                        {
+                                            "name": "amount",
+                                            "type": "number"
+                                        },
+                                        {
+                                            "name": "currency",
+                                            "type": "text"
+                                        }
+                                    ],
+                                    "type": "collection"
+                                },
+                                {
+                                    "name": "description",
+                                    "type": "text"
+                                },
+                                {
+                                    "name": "harmonizationCode",
+                                    "type": "text"
+                                },
+                                {
+                                    "name": "productId",
+                                    "type": "number"
+                                },
+                                {
+                                    "name": "quantity",
+                                    "type": "number"
+                                },
+                                {
+                                    "name": "weight",
+                                    "type": "number"
+                                },
+                                {
+                                    "name": "weightUnit",
+                                    "type": "text"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array"
+                    },
+                    {
+                        "name": "customsDeclarationType",
+                        "type": "text"
+                    },
+                    {
+                        "name": "deliveryConfirmation",
+                        "type": "text"
+                    },
+                    {
+                        "name": "discount",
+                        "spec": [
+                            {
+                                "name": "amount",
+                                "type": "number"
+                            },
+                            {
+                                "name": "currency",
+                                "type": "text"
+                            }
+                        ],
+                        "type": "collection"
+                    },
+                    {
+                        "name": "doNotPrepayPostage",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "dryIceWeight",
+                        "type": "number"
+                    },
+                    {
+                        "name": "gift",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "giftMessage",
+                        "type": "text"
+                    },
+                    {
+                        "name": "height",
+                        "type": "number"
+                    },
+                    {
+                        "name": "holdUntilDate",
+                        "type": "text"
+                    },
+                    {
+                        "name": "includeReturnLabel",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "insuranceCost",
+                        "spec": [
+                            {
+                                "name": "amount",
+                                "type": "number"
+                            },
+                            {
+                                "name": "currency",
+                                "type": "text"
+                            }
+                        ],
+                        "type": "collection"
+                    },
+                    {
+                        "name": "insuranceProvider",
+                        "type": "text"
+                    },
+                    {
+                        "name": "insuredValue",
+                        "spec": [
+                            {
+                                "name": "amount",
+                                "type": "number"
+                            },
+                            {
+                                "name": "currency",
+                                "type": "text"
+                            }
+                        ],
+                        "type": "collection"
+                    },
+                    {
+                        "name": "internalNotes",
+                        "type": "text"
+                    },
+                    {
+                        "name": "labels",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "hexColor",
+                                    "type": "text"
+                                },
+                                {
+                                    "name": "labelId",
+                                    "type": "number"
+                                },
+                                {
+                                    "name": "name",
+                                    "type": "text"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array"
+                    },
+                    {
+                        "name": "length",
+                        "type": "number"
+                    },
+                    {
+                        "name": "nonMachinable",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "notesFromBuyer",
+                        "type": "text"
+                    },
+                    {
+                        "name": "notesToBuyer",
+                        "type": "text"
+                    },
+                    {
+                        "name": "orderDate",
+                        "type": "text"
+                    },
+                    {
+                        "name": "orderItems",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "discount",
+                                    "spec": [
+                                        {
+                                            "name": "amount",
+                                            "type": "number"
+                                        },
+                                        {
+                                            "name": "currency",
+                                            "type": "text"
+                                        }
+                                    ],
+                                    "type": "collection"
+                                },
+                                {
+                                    "name": "listingName",
+                                    "type": "text"
+                                },
+                                {
+                                    "name": "listingSku",
+                                    "type": "text"
+                                },
+                                {
+                                    "name": "notes",
+                                    "type": "text"
+                                },
+                                {
+                                    "name": "quantityOrdered",
+                                    "type": "number"
+                                },
+                                {
+                                    "name": "tax",
+                                    "spec": [
+                                        {
+                                            "name": "amount",
+                                            "type": "number"
+                                        },
+                                        {
+                                            "name": "currency",
+                                            "type": "text"
+                                        }
+                                    ],
+                                    "type": "collection"
+                                },
+                                {
+                                    "name": "unitPrice",
+                                    "spec": [
+                                        {
+                                            "name": "amount",
+                                            "type": "number"
+                                        },
+                                        {
+                                            "name": "currency",
+                                            "type": "text"
+                                        }
+                                    ],
+                                    "type": "collection"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array"
+                    },
+                    {
+                        "name": "orderNumber",
+                        "type": "text"
+                    },
+                    {
+                        "name": "orderTotal",
+                        "spec": [
+                            {
+                                "name": "amount",
+                                "type": "number"
+                            },
+                            {
+                                "name": "currency",
+                                "type": "text"
+                            }
+                        ],
+                        "type": "collection"
+                    },
+                    {
+                        "name": "paymentDate",
+                        "type": "text"
+                    },
+                    {
+                        "name": "receiveByDate",
+                        "type": "text"
+                    },
+                    {
+                        "name": "releaseWithoutSignature",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "requestedShippingService",
+                        "type": "text"
+                    },
+                    {
+                        "name": "salesChannelId",
+                        "type": "number"
+                    },
+                    {
+                        "name": "saturdayDelivery",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "shipAddress1",
+                        "type": "text"
+                    },
+                    {
+                        "name": "shipAddress2",
+                        "type": "text"
+                    },
+                    {
+                        "name": "shipAddress3",
+                        "type": "text"
+                    },
+                    {
+                        "name": "shipByDate",
+                        "type": "text"
+                    },
+                    {
+                        "name": "shipCity",
+                        "type": "text"
+                    },
+                    {
+                        "name": "shipCompany",
+                        "type": "text"
+                    },
+                    {
+                        "name": "shipCountry",
+                        "type": "text"
+                    },
+                    {
+                        "name": "shipEmail",
+                        "type": "text"
+                    },
+                    {
+                        "name": "shipMethod",
+                        "spec": [
+                            {
+                                "name": "ltlFtlShipment",
+                                "spec": [
+                                    {
+                                        "name": "boxCount",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "contact",
+                                        "spec": [
+                                            {
+                                                "name": "email",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "fax",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "id",
+                                                "type": "number"
+                                            },
+                                            {
+                                                "name": "name",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "phone",
+                                                "type": "text"
+                                            }
+                                        ],
+                                        "type": "collection"
+                                    },
+                                    {
+                                        "name": "freightReadyDate",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "id",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "liabilityCoverage",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "liabilityType",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "measurementUnitId",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "pallets",
+                                        "spec": {
+                                            "spec": [
+                                                {
+                                                    "name": "height",
+                                                    "type": "number"
+                                                },
+                                                {
+                                                    "name": "id",
+                                                    "type": "number"
+                                                },
+                                                {
+                                                    "name": "length",
+                                                    "type": "number"
+                                                },
+                                                {
+                                                    "name": "packages",
+                                                    "spec": {
+                                                        "spec": [
+                                                            {
+                                                                "name": "height",
+                                                                "type": "number"
+                                                            },
+                                                            {
+                                                                "name": "id",
+                                                                "type": "number"
+                                                            },
+                                                            {
+                                                                "name": "insuredValue",
+                                                                "spec": [
+                                                                    {
+                                                                        "name": "amount",
+                                                                        "type": "number"
+                                                                    },
+                                                                    {
+                                                                        "name": "currency",
+                                                                        "type": "text"
+                                                                    },
+                                                                    {
+                                                                        "name": "roundingMode",
+                                                                        "type": "text"
+                                                                    }
+                                                                ],
+                                                                "type": "collection"
+                                                            },
+                                                            {
+                                                                "name": "length",
+                                                                "type": "number"
+                                                            },
+                                                            {
+                                                                "name": "packagingTypeId",
+                                                                "type": "number"
+                                                            },
+                                                            {
+                                                                "name": "weight",
+                                                                "type": "number"
+                                                            },
+                                                            {
+                                                                "name": "weightUnitOfMeasure",
+                                                                "type": "text"
+                                                            },
+                                                            {
+                                                                "name": "width",
+                                                                "type": "number"
+                                                            }
+                                                        ],
+                                                        "type": "collection"
+                                                    },
+                                                    "type": "array"
+                                                },
+                                                {
+                                                    "name": "packagingType",
+                                                    "type": "text"
+                                                },
+                                                {
+                                                    "name": "stacked",
+                                                    "type": "boolean"
+                                                },
+                                                {
+                                                    "name": "weight",
+                                                    "type": "number"
+                                                },
+                                                {
+                                                    "name": "width",
+                                                    "type": "number"
+                                                }
+                                            ],
+                                            "type": "collection"
+                                        },
+                                        "type": "array"
+                                    },
+                                    {
+                                        "name": "roleType",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "sellerDeclaredValue",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "sellerFreightClass",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "specialService",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "totalWeight",
+                                        "type": "number"
+                                    }
+                                ],
+                                "type": "collection"
+                            },
+                            {
+                                "name": "packageTypeId",
+                                "type": "number"
+                            },
+                            {
+                                "name": "shippingCarrier",
+                                "type": "text"
+                            },
+                            {
+                                "name": "shippingProviderId",
+                                "type": "number"
+                            },
+                            {
+                                "name": "shippingServiceId",
+                                "type": "number"
+                            }
+                        ],
+                        "type": "collection"
+                    },
+                    {
+                        "name": "shipName",
+                        "type": "text"
+                    },
+                    {
+                        "name": "shipPhone",
+                        "type": "text"
+                    },
+                    {
+                        "name": "shipState",
+                        "type": "text"
+                    },
+                    {
+                        "name": "shipZipCode",
+                        "type": "text"
+                    },
+                    {
+                        "name": "shippingCost",
+                        "spec": [
+                            {
+                                "name": "amount",
+                                "type": "number"
+                            },
+                            {
+                                "name": "currency",
+                                "type": "text"
+                            }
+                        ],
+                        "type": "collection"
+                    },
+                    {
+                        "name": "showPostage",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "suppressChannelUpdate",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "weight",
+                        "type": "number"
+                    },
+                    {
+                        "name": "width",
+                        "type": "number"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 13,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": 2400,
+                    "y": 450
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 12,
+                            "module": "http:ActionSendData",
+                            "version": 3,
+                            "parameters": {
+                                "handleErrors": false,
+                                "useNewZLibDeCompress": "true"
+                            },
+                            "mapper": {
+                                "ca": "",
+                                "qs": [],
+                                "url": "{{23.v_skubana_api_domain}}/v1/shipment/services?carrierCode={{2.shipMethod.shippingCarrier}}",
+                                "gzip": true,
+                                "method": "get",
+                                "headers": [
+                                    {
+                                        "name": "Content-Type",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "name": "Authorization",
+                                        "value": "Bearer {{23.v_skubana_access_token}}"
+                                    }
+                                ],
+                                "timeout": "",
+                                "useMtls": false,
+                                "authPass": "",
+                                "authUser": "",
+                                "bodyType": "",
+                                "serializeUrl": false,
+                                "shareCookies": false,
+                                "parseResponse": false,
+                                "followRedirect": true,
+                                "useQuerystring": false,
+                                "followAllRedirects": false,
+                                "rejectUnauthorized": true
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 2700,
+                                    "y": 0,
+                                    "name": "Skubana - Get Shipping Services"
+                                },
+                                "restore": {
+                                    "qs": {
+                                        "mode": "chose",
+                                        "items": []
+                                    },
+                                    "method": {
+                                        "mode": "chose",
+                                        "label": "GET"
+                                    },
+                                    "headers": {
+                                        "mode": "chose",
+                                        "items": [
+                                            "undefined",
+                                            "undefined"
+                                        ]
+                                    },
+                                    "bodyType": {
+                                        "label": ""
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "handleErrors",
+                                        "type": "boolean",
+                                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useNewZLibDeCompress",
+                                        "type": "hidden"
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "url",
+                                        "type": "url",
+                                        "label": "URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "serializeUrl",
+                                        "type": "boolean",
+                                        "label": "Serialize URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "method",
+                                        "type": "select",
+                                        "label": "Method",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "get",
+                                                "head",
+                                                "post",
+                                                "put",
+                                                "patch",
+                                                "delete",
+                                                "options"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Headers",
+                                        "labels": {
+                                            "add": "Add a header",
+                                            "edit": "Edit a header"
+                                        }
+                                    },
+                                    {
+                                        "name": "qs",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Query String",
+                                        "labels": {
+                                            "add": "Add parameter",
+                                            "edit": "Edit parameter"
+                                        }
+                                    },
+                                    {
+                                        "name": "bodyType",
+                                        "type": "select",
+                                        "label": "Body type",
+                                        "validate": {
+                                            "enum": [
+                                                "raw",
+                                                "x_www_form_urlencoded",
+                                                "multipart_form_data"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "parseResponse",
+                                        "type": "boolean",
+                                        "label": "Parse response",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "authUser",
+                                        "type": "text",
+                                        "label": "User name"
+                                    },
+                                    {
+                                        "name": "authPass",
+                                        "type": "password",
+                                        "label": "Password"
+                                    },
+                                    {
+                                        "name": "timeout",
+                                        "type": "uinteger",
+                                        "label": "Timeout",
+                                        "validate": {
+                                            "max": 300,
+                                            "min": 1
+                                        }
+                                    },
+                                    {
+                                        "name": "shareCookies",
+                                        "type": "boolean",
+                                        "label": "Share cookies with other HTTP modules",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "ca",
+                                        "type": "cert",
+                                        "label": "Self-signed certificate",
+                                        "multiline": true
+                                    },
+                                    {
+                                        "name": "rejectUnauthorized",
+                                        "type": "boolean",
+                                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "followRedirect",
+                                        "type": "boolean",
+                                        "label": "Follow redirect",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useQuerystring",
+                                        "type": "boolean",
+                                        "label": "Disable serialization of multiple same query string keys as arrays",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "gzip",
+                                        "type": "boolean",
+                                        "label": "Request compressed content",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "useMtls",
+                                        "type": "boolean",
+                                        "label": "Use Mutual TLS",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "followAllRedirects",
+                                        "type": "boolean",
+                                        "label": "Follow all redirect",
+                                        "required": true
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 14,
+                            "module": "json:ParseJSON",
+                            "version": 1,
+                            "parameters": {
+                                "type": 187457
+                            },
+                            "mapper": {
+                                "json": "{{12.data}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 3000,
+                                    "y": 0
+                                },
+                                "restore": {
+                                    "type": {
+                                        "label": "skubana_shipping_services"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "type",
+                                        "type": "udt",
+                                        "label": "Data structure"
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "json",
+                                        "type": "text",
+                                        "label": "JSON string",
+                                        "required": true
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "shippingServiceId",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "name": "shippingCarrier",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "serviceId",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "serviceName",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "serviceCode",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "abbreviation",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "international",
+                                        "type": "boolean"
+                                    },
+                                    {
+                                        "name": "weightRequired",
+                                        "type": "boolean"
+                                    },
+                                    {
+                                        "name": "dimensionsRequired",
+                                        "type": "boolean"
+                                    },
+                                    {
+                                        "name": "halfPageLabel",
+                                        "type": "boolean"
+                                    },
+                                    {
+                                        "name": "active",
+                                        "type": "boolean"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 16,
+                            "module": "util:SetVariable2",
+                            "version": 1,
+                            "parameters": {},
+                            "filter": {
+                                "name": "",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{14.shippingServiceId}}",
+                                            "b": "{{2.shipMethod.shippingServiceId}}",
+                                            "o": "text:equal"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "name": "v_shipping_service",
+                                "scope": "roundtrip",
+                                "value": "{{14.serviceName}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 3300,
+                                    "y": 0
+                                },
+                                "restore": {
+                                    "scope": {
+                                        "label": "One cycle"
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "name": "name",
+                                        "type": "text",
+                                        "label": "Variable name",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "scope",
+                                        "type": "select",
+                                        "label": "Variable lifetime",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "roundtrip",
+                                                "execution"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "value",
+                                        "type": "any",
+                                        "label": "Variable value"
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "v_shipping_service",
+                                        "type": "any",
+                                        "label": "v_shipping_service"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 31,
+                            "module": "util:GetVariables",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "variables": [
+                                    "v_shipping_service"
+                                ]
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 2700,
+                                    "y": 300
+                                },
+                                "restore": {
+                                    "variables": {
+                                        "items": [
+                                            "undefined"
+                                        ]
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "name": "variables",
+                                        "spec": {
+                                            "name": "name",
+                                            "type": "text",
+                                            "label": "Variable name",
+                                            "required": true
+                                        },
+                                        "type": "array",
+                                        "label": "Variables"
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "v_shipping_service",
+                                        "type": "any",
+                                        "label": "v_shipping_service"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 32,
+                            "module": "json:CreateJSON",
+                            "version": 1,
+                            "parameters": {
+                                "type": 188121,
+                                "space": ""
+                            },
+                            "filter": {
+                                "name": "",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{31.v_shipping_service}}",
+                                            "b": "{{2.shipMethod.shippingCarrier}}",
+                                            "o": "text:notequal"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "line_items": "{{7.line_items}}",
+                                "shipping_information": {
+                                    "carrier_code": "{{2.shipMethod.shippingCarrier}}",
+                                    "service_code": "{{2.shipMethod.shippingServiceId}}",
+                                    "service_type": "{{31.v_shipping_service}}",
+                                    "carrier_friendly_name": "{{2.shipMethod.shippingCarrier}}"
+                                }
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 3000,
+                                    "y": 300
+                                },
+                                "restore": {
+                                    "type": {
+                                        "label": "nuoder_update_order_shipping"
+                                    },
+                                    "space": {
+                                        "label": ""
+                                    },
+                                    "line_items": {
+                                        "mode": "edit"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "type",
+                                        "type": "udt",
+                                        "label": "Data structure",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "space",
+                                        "type": "select",
+                                        "label": "Indentation",
+                                        "validate": {
+                                            "enum": [
+                                                "tab",
+                                                "2",
+                                                "4"
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "line_items",
+                                        "spec": [
+                                            {
+                                                "name": "product",
+                                                "spec": [
+                                                    {
+                                                        "name": "_id",
+                                                        "type": "text"
+                                                    },
+                                                    {
+                                                        "name": "style_number",
+                                                        "type": "text"
+                                                    },
+                                                    {
+                                                        "name": "color",
+                                                        "type": "text"
+                                                    },
+                                                    {
+                                                        "name": "color_code",
+                                                        "type": "text"
+                                                    },
+                                                    {
+                                                        "name": "brand_id",
+                                                        "type": "text"
+                                                    },
+                                                    {
+                                                        "name": "season",
+                                                        "type": "text"
+                                                    }
+                                                ],
+                                                "type": "collection"
+                                            },
+                                            {
+                                                "name": "ship_start",
+                                                "type": "date"
+                                            },
+                                            {
+                                                "name": "ship_end",
+                                                "type": "date"
+                                            },
+                                            {
+                                                "name": "sizes",
+                                                "spec": [
+                                                    {
+                                                        "name": "size",
+                                                        "type": "text"
+                                                    },
+                                                    {
+                                                        "name": "quantity",
+                                                        "type": "number"
+                                                    },
+                                                    {
+                                                        "name": "price",
+                                                        "type": "number"
+                                                    },
+                                                    {
+                                                        "name": "original_price",
+                                                        "type": "number"
+                                                    },
+                                                    {
+                                                        "name": "upc",
+                                                        "type": "text"
+                                                    }
+                                                ],
+                                                "type": "array"
+                                            },
+                                            {
+                                                "name": "discount",
+                                                "type": "number"
+                                            },
+                                            {
+                                                "name": "warehouse",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "prebook",
+                                                "type": "boolean"
+                                            }
+                                        ],
+                                        "type": "array"
+                                    },
+                                    {
+                                        "name": "shipping_information",
+                                        "spec": [
+                                            {
+                                                "name": "service_type",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "service_code",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "carrier_code",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "carrier_friendly_name",
+                                                "type": "text"
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "shipping_information"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 17,
+                            "module": "amazon-lambda:invokeAFunction",
+                            "version": 1,
+                            "parameters": {
+                                "__IMTCONN__": 2937482
+                            },
+                            "mapper": {
+                                "body": "{\n\t\"url\": \"/api/order/number/{{8.value}}\",\n\t\"method\": \"POST\",\n\t\"body\": {{32.json}}\n}",
+                                "function": "nuorder_wrapper_api",
+                                "InvocationType": "RequestResponse"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 3300,
+                                    "y": 300,
+                                    "name": "NuOder - Update shipping information"
+                                },
+                                "restore": {
+                                    "function": {
+                                        "mode": "chose",
+                                        "label": "nuorder_wrapper_api ($LATEST)"
+                                    },
+                                    "__IMTCONN__": {
+                                        "label": "My Amazon Lambda connection"
+                                    },
+                                    "InvocationType": {
+                                        "mode": "chose",
+                                        "label": "Request Response"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "function",
+                                        "type": "select",
+                                        "label": "Function Name",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "InvocationType",
+                                        "type": "select",
+                                        "label": "Invocation Type",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "RequestResponse",
+                                                "Event",
+                                                "DryRun"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "body",
+                                        "type": "any",
+                                        "label": "Body"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 19,
+                            "module": "builtin:BasicRouter",
+                            "version": 1,
+                            "mapper": null,
+                            "metadata": {
+                                "designer": {
+                                    "x": 2700,
+                                    "y": 750
+                                }
+                            },
+                            "routes": [
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 20,
+                                            "module": "amazon-lambda:invokeAFunction",
+                                            "version": 1,
+                                            "parameters": {
+                                                "__IMTCONN__": 2937482
+                                            },
+                                            "filter": {
+                                                "name": "if shipped?",
+                                                "conditions": [
+                                                    [
+                                                        {
+                                                            "a": "{{2.orderStatus}}",
+                                                            "b": "SHIPPED",
+                                                            "o": "text:equal"
+                                                        }
+                                                    ]
+                                                ]
+                                            },
+                                            "mapper": {
+                                                "body": "{\n\t\"url\": \"/api/order/number/{{8.value}}/shipped\",\n\t\"method\": \"POST\"\n}",
+                                                "function": "nuorder_wrapper_api",
+                                                "InvocationType": "RequestResponse"
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 3000,
+                                                    "y": 600,
+                                                    "name": "NuOder - Update Shipped status"
+                                                },
+                                                "restore": {
+                                                    "function": {
+                                                        "mode": "chose",
+                                                        "label": "nuorder_wrapper_api ($LATEST)"
+                                                    },
+                                                    "__IMTCONN__": {
+                                                        "label": "My Amazon Lambda connection"
+                                                    },
+                                                    "InvocationType": {
+                                                        "mode": "chose",
+                                                        "label": "Request Response"
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "__IMTCONN__",
+                                                        "type": "account",
+                                                        "label": "Connection",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "function",
+                                                        "type": "select",
+                                                        "label": "Function Name",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "InvocationType",
+                                                        "type": "select",
+                                                        "label": "Invocation Type",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "enum": [
+                                                                "RequestResponse",
+                                                                "Event",
+                                                                "DryRun"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "body",
+                                                        "type": "any",
+                                                        "label": "Body"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 21,
+                                            "module": "amazon-lambda:invokeAFunction",
+                                            "version": 1,
+                                            "parameters": {
+                                                "__IMTCONN__": 2937482
+                                            },
+                                            "filter": {
+                                                "name": "if cancelled?",
+                                                "conditions": [
+                                                    [
+                                                        {
+                                                            "a": "{{2.orderStatus}}",
+                                                            "b": "CANCELLED",
+                                                            "o": "text:equal"
+                                                        }
+                                                    ]
+                                                ]
+                                            },
+                                            "mapper": {
+                                                "body": "{\n\t\"url\": \"/api/order/number/{{8.value}}/cancelled\",\n\t\"method\": \"POST\"\n}",
+                                                "function": "nuorder_wrapper_api",
+                                                "InvocationType": "RequestResponse"
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 3000,
+                                                    "y": 900,
+                                                    "name": "NuOder - Update Cancelled status"
+                                                },
+                                                "restore": {
+                                                    "function": {
+                                                        "mode": "chose",
+                                                        "label": "nuorder_wrapper_api ($LATEST)"
+                                                    },
+                                                    "__IMTCONN__": {
+                                                        "label": "My Amazon Lambda connection"
+                                                    },
+                                                    "InvocationType": {
+                                                        "mode": "chose",
+                                                        "label": "Request Response"
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "__IMTCONN__",
+                                                        "type": "account",
+                                                        "label": "Connection",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "function",
+                                                        "type": "select",
+                                                        "label": "Function Name",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "InvocationType",
+                                                        "type": "select",
+                                                        "label": "Invocation Type",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "enum": [
+                                                                "RequestResponse",
+                                                                "Event",
+                                                                "DryRun"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "body",
+                                                        "type": "any",
+                                                        "label": "Body"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "shatter": false,
+            "maxErrors": 3,
+            "autoCommit": false,
+            "sequential": false,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "eu1.integromat.com"
+    }
+}

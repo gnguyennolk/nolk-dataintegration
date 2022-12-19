@@ -1,0 +1,784 @@
+{
+    "name": "Weekly Sync: Sales Channels",
+    "flow": [
+        {
+            "id": 2,
+            "module": "util:SetVariables",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "scope": "roundtrip",
+                "variables": [
+                    {
+                        "name": "skubana_api_slug",
+                        "value": "https://api.skubana.com"
+                    },
+                    {
+                        "name": "skubana_access_token",
+                        "value": "ab0e575e-113f-46f5-9c15-c86f019e56c2"
+                    },
+                    {
+                        "name": "v_receipt_1",
+                        "value": "martin@nolk.com"
+                    },
+                    {
+                        "name": "GET: Skubana Products",
+                        "value": "/v1.1/products"
+                    },
+                    {
+                        "name": "GET: Skubana Sales Channels",
+                        "value": "/v1/saleschannels"
+                    },
+                    {
+                        "name": "GET: Vendor Products",
+                        "value": "/v1/vendorproducts"
+                    },
+                    {
+                        "name": "GET: Single Skubana Product",
+                        "value": "/v1.1/product"
+                    },
+                    {
+                        "name": "PUT: Skubana Vendor",
+                        "value": "/v1/vendors"
+                    }
+                ]
+            },
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 0
+                },
+                "restore": {
+                    "scope": {
+                        "label": "One cycle"
+                    },
+                    "variables": {
+                        "items": [
+                            "undefined",
+                            "undefined",
+                            "undefined",
+                            "undefined",
+                            "undefined",
+                            "undefined",
+                            "undefined",
+                            "undefined"
+                        ]
+                    }
+                },
+                "expect": [
+                    {
+                        "name": "variables",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Variable name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "any",
+                                "label": "Variable value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Variables"
+                    },
+                    {
+                        "name": "scope",
+                        "type": "select",
+                        "label": "Variable lifetime",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "roundtrip",
+                                "execution"
+                            ]
+                        }
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "skubana_api_slug",
+                        "type": "any",
+                        "label": "skubana_api_slug"
+                    },
+                    {
+                        "name": "skubana_access_token",
+                        "type": "any",
+                        "label": "skubana_access_token"
+                    },
+                    {
+                        "name": "v_receipt_1",
+                        "type": "any",
+                        "label": "v_receipt_1"
+                    },
+                    {
+                        "name": "GET: Skubana Products",
+                        "type": "any",
+                        "label": "GET: Skubana Products"
+                    },
+                    {
+                        "name": "GET: Skubana Sales Channels",
+                        "type": "any",
+                        "label": "GET: Skubana Sales Channels"
+                    },
+                    {
+                        "name": "GET: Vendor Products",
+                        "type": "any",
+                        "label": "GET: Vendor Products"
+                    },
+                    {
+                        "name": "GET: Single Skubana Product",
+                        "type": "any",
+                        "label": "GET: Single Skubana Product"
+                    },
+                    {
+                        "name": "PUT: Skubana Vendor",
+                        "type": "any",
+                        "label": "PUT: Skubana Vendor"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 4,
+            "module": "http:ActionSendData",
+            "version": 3,
+            "parameters": {
+                "handleErrors": false,
+                "useNewZLibDeCompress": "true"
+            },
+            "mapper": {
+                "ca": "",
+                "qs": [],
+                "url": "{{2.skubana_api_slug}}{{2.`GET: Skubana Sales Channels`}}",
+                "gzip": true,
+                "method": "get",
+                "headers": [
+                    {
+                        "name": "Authorization",
+                        "value": "Bearer {{2.skubana_access_token}}"
+                    }
+                ],
+                "timeout": "",
+                "useMtls": false,
+                "authPass": "",
+                "authUser": "",
+                "bodyType": "",
+                "serializeUrl": false,
+                "shareCookies": false,
+                "parseResponse": true,
+                "followRedirect": true,
+                "useQuerystring": false,
+                "followAllRedirects": false,
+                "rejectUnauthorized": true
+            },
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 0
+                },
+                "restore": {
+                    "qs": {
+                        "mode": "chose",
+                        "items": []
+                    },
+                    "method": {
+                        "mode": "chose",
+                        "label": "GET"
+                    },
+                    "headers": {
+                        "mode": "chose",
+                        "items": [
+                            "undefined"
+                        ]
+                    },
+                    "bodyType": {
+                        "label": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "handleErrors",
+                        "type": "boolean",
+                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                        "required": true
+                    },
+                    {
+                        "name": "useNewZLibDeCompress",
+                        "type": "hidden"
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "url",
+                        "type": "url",
+                        "label": "URL",
+                        "required": true
+                    },
+                    {
+                        "name": "serializeUrl",
+                        "type": "boolean",
+                        "label": "Serialize URL",
+                        "required": true
+                    },
+                    {
+                        "name": "method",
+                        "type": "select",
+                        "label": "Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "get",
+                                "head",
+                                "post",
+                                "put",
+                                "patch",
+                                "delete",
+                                "options"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "headers",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Headers",
+                        "labels": {
+                            "add": "Add a header",
+                            "edit": "Edit a header"
+                        }
+                    },
+                    {
+                        "name": "qs",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Query String",
+                        "labels": {
+                            "add": "Add parameter",
+                            "edit": "Edit parameter"
+                        }
+                    },
+                    {
+                        "name": "bodyType",
+                        "type": "select",
+                        "label": "Body type",
+                        "validate": {
+                            "enum": [
+                                "raw",
+                                "x_www_form_urlencoded",
+                                "multipart_form_data"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "parseResponse",
+                        "type": "boolean",
+                        "label": "Parse response",
+                        "required": true
+                    },
+                    {
+                        "name": "authUser",
+                        "type": "text",
+                        "label": "User name"
+                    },
+                    {
+                        "name": "authPass",
+                        "type": "password",
+                        "label": "Password"
+                    },
+                    {
+                        "name": "timeout",
+                        "type": "uinteger",
+                        "label": "Timeout",
+                        "validate": {
+                            "max": 300,
+                            "min": 1
+                        }
+                    },
+                    {
+                        "name": "shareCookies",
+                        "type": "boolean",
+                        "label": "Share cookies with other HTTP modules",
+                        "required": true
+                    },
+                    {
+                        "name": "ca",
+                        "type": "cert",
+                        "label": "Self-signed certificate",
+                        "multiline": true
+                    },
+                    {
+                        "name": "rejectUnauthorized",
+                        "type": "boolean",
+                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                        "required": true
+                    },
+                    {
+                        "name": "followRedirect",
+                        "type": "boolean",
+                        "label": "Follow redirect",
+                        "required": true
+                    },
+                    {
+                        "name": "useQuerystring",
+                        "type": "boolean",
+                        "label": "Disable serialization of multiple same query string keys as arrays",
+                        "required": true
+                    },
+                    {
+                        "name": "gzip",
+                        "type": "boolean",
+                        "label": "Request compressed content",
+                        "required": true
+                    },
+                    {
+                        "name": "useMtls",
+                        "type": "boolean",
+                        "label": "Use Mutual TLS",
+                        "required": true
+                    },
+                    {
+                        "name": "followAllRedirects",
+                        "type": "boolean",
+                        "label": "Follow all redirect",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 22,
+            "module": "builtin:BasicFeeder",
+            "version": 1,
+            "parameters": {},
+            "filter": {
+                "name": "Status = 200",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{4.statusCode}}",
+                            "b": "200",
+                            "o": "number:equal"
+                        },
+                        {
+                            "a": "{{4.fileSize}}",
+                            "b": "5",
+                            "o": "number:greater"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "array": "{{4.data}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 600,
+                    "y": 0
+                },
+                "restore": {
+                    "array": {
+                        "mode": "edit"
+                    }
+                },
+                "expect": [
+                    {
+                        "mode": "edit",
+                        "name": "array",
+                        "spec": [],
+                        "type": "array",
+                        "label": "Array"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 20,
+            "module": "airtable:ActionSearchRecords",
+            "version": 3,
+            "parameters": {
+                "__IMTCONN__": 3543976
+            },
+            "mapper": {
+                "base": "appYS5dIeZyo4f0cy",
+                "table": "Sales Channels",
+                "formula": "{Channel ID} = \"{{22.salesChannelId}}\"",
+                "maxRecords": "1",
+                "useColumnId": false
+            },
+            "metadata": {
+                "designer": {
+                    "x": 900,
+                    "y": 0
+                },
+                "restore": {
+                    "base": {
+                        "mode": "chose",
+                        "label": "Skubana Environment"
+                    },
+                    "sort": {
+                        "mode": "chose",
+                        "items": []
+                    },
+                    "view": {
+                        "mode": "chose",
+                        "label": ""
+                    },
+                    "table": {
+                        "mode": "chose",
+                        "label": "Sales Channels"
+                    },
+                    "__IMTCONN__": {
+                        "label": "Nolk OS Airtable"
+                    },
+                    "useColumnId": {
+                        "mode": "chose"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "base",
+                        "type": "select",
+                        "label": "Base",
+                        "required": true
+                    },
+                    {
+                        "name": "useColumnId",
+                        "type": "boolean",
+                        "label": "Use Column ID",
+                        "required": true
+                    },
+                    {
+                        "name": "table",
+                        "type": "select",
+                        "label": "Table",
+                        "required": true
+                    },
+                    {
+                        "name": "formula",
+                        "type": "text",
+                        "label": "Formula"
+                    },
+                    {
+                        "name": "maxRecords",
+                        "type": "integer",
+                        "label": "Limit"
+                    },
+                    {
+                        "name": "sort",
+                        "spec": [
+                            {
+                                "name": "field",
+                                "type": "select",
+                                "label": "Field"
+                            },
+                            {
+                                "name": "direction",
+                                "type": "select",
+                                "label": "Direction",
+                                "options": [
+                                    {
+                                        "label": "Descending",
+                                        "value": "desc"
+                                    },
+                                    {
+                                        "label": "Ascending",
+                                        "value": "asc"
+                                    }
+                                ]
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Sort"
+                    },
+                    {
+                        "name": "view",
+                        "type": "select",
+                        "label": "View"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "__IMTLENGTH__",
+                        "type": "uinteger",
+                        "label": "Total number of bundles"
+                    },
+                    {
+                        "name": "__IMTINDEX__",
+                        "type": "uinteger",
+                        "label": "Bundle order position"
+                    },
+                    {
+                        "name": "id",
+                        "type": "text",
+                        "label": "ID"
+                    },
+                    {
+                        "name": "createdTime",
+                        "type": "date",
+                        "label": "Created Time"
+                    },
+                    {
+                        "name": "Name",
+                        "type": "text",
+                        "label": "Name"
+                    },
+                    {
+                        "name": "Channel ID",
+                        "type": "number",
+                        "label": "Channel ID"
+                    },
+                    {
+                        "name": "Active",
+                        "type": "text",
+                        "label": "Active"
+                    },
+                    {
+                        "name": "Listing SKUs",
+                        "spec": {
+                            "label": "Record ID"
+                        },
+                        "type": "array",
+                        "label": "Listing SKUs"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 52,
+            "module": "airtable:upsertRecord",
+            "version": 3,
+            "parameters": {
+                "__IMTCONN__": 3543976
+            },
+            "mapper": {
+                "base": "appYS5dIeZyo4f0cy",
+                "table": "Sales Channels",
+                "record": {
+                    "fld92RXlsuRAxS0Nm": "{{22.active}}",
+                    "fldqLSqarwlLFfyuP": "Last Sync {{now}}",
+                    "fldsoBVeMaTkmBd83": "{{22.name}}",
+                    "fldx5ecO5G0BWDOtp": "{{22.salesChannelId}}"
+                },
+                "recordId": "{{20.id}}",
+                "typecast": true,
+                "useColumnId": false
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1200,
+                    "y": 0
+                },
+                "restore": {
+                    "base": {
+                        "label": "Skubana Environment"
+                    },
+                    "table": {
+                        "label": "Sales Channels"
+                    },
+                    "record": {
+                        "nested": {
+                            "fldNMPKrXa90Mklpv": {
+                                "mode": "chose",
+                                "items": []
+                            }
+                        }
+                    },
+                    "typecast": {
+                        "mode": "chose"
+                    },
+                    "__IMTCONN__": {
+                        "label": "Nolk OS Airtable"
+                    },
+                    "useColumnId": {
+                        "mode": "chose"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "base",
+                        "type": "select",
+                        "label": "Base",
+                        "required": true
+                    },
+                    {
+                        "name": "typecast",
+                        "type": "boolean",
+                        "label": "Smart links",
+                        "required": true
+                    },
+                    {
+                        "name": "useColumnId",
+                        "type": "boolean",
+                        "label": "Use Column ID",
+                        "required": true
+                    },
+                    {
+                        "name": "table",
+                        "type": "select",
+                        "label": "Table",
+                        "required": true
+                    },
+                    {
+                        "name": "recordId",
+                        "type": "text",
+                        "label": "Record ID"
+                    },
+                    {
+                        "name": "record",
+                        "spec": [
+                            {
+                                "name": "fldsoBVeMaTkmBd83",
+                                "type": "text",
+                                "label": "Name"
+                            },
+                            {
+                                "name": "fldx5ecO5G0BWDOtp",
+                                "type": "number",
+                                "label": "Channel ID"
+                            },
+                            {
+                                "name": "fld92RXlsuRAxS0Nm",
+                                "type": "text",
+                                "label": "Active"
+                            },
+                            {
+                                "name": "fldNMPKrXa90Mklpv",
+                                "spec": {
+                                    "label": "Record ID"
+                                },
+                                "type": "array",
+                                "label": "Listing SKUs"
+                            },
+                            {
+                                "name": "fldqLSqarwlLFfyuP",
+                                "type": "text",
+                                "label": "Nolk OS Status"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Record"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "id",
+                        "type": "text",
+                        "label": "ID"
+                    },
+                    {
+                        "name": "createdTime",
+                        "type": "date",
+                        "label": "Created Time"
+                    },
+                    {
+                        "name": "Name",
+                        "type": "text",
+                        "label": "Name"
+                    },
+                    {
+                        "name": "Channel ID",
+                        "type": "number",
+                        "label": "Channel ID"
+                    },
+                    {
+                        "name": "Active",
+                        "type": "text",
+                        "label": "Active"
+                    },
+                    {
+                        "name": "Listing SKUs",
+                        "spec": {
+                            "label": "Record ID"
+                        },
+                        "type": "array",
+                        "label": "Listing SKUs"
+                    },
+                    {
+                        "name": "Nolk OS Status",
+                        "type": "text",
+                        "label": "Nolk OS Status"
+                    }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "shatter": false,
+            "maxErrors": 3,
+            "autoCommit": false,
+            "sequential": false,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false
+        },
+        "designer": {
+            "orphans": [],
+            "notes": [
+                {
+                    "id": 51,
+                    "text": "",
+                    "filter": false
+                },
+                {
+                    "text": "Status Code: 200\nor\nData: blank",
+                    "filter": true
+                },
+                {
+                    "text": "Status Code: 200\n&\nData: Not blank",
+                    "filter": true
+                },
+                {
+                    "text": "Stop if data blank or",
+                    "filter": true
+                }
+            ]
+        },
+        "zone": "eu1.integromat.com"
+    }
+}
